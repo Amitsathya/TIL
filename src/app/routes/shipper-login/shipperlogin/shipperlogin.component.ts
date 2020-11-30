@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../../../shared/services/auth.service";
-
+import {MatDialog} from '@angular/material/dialog';
+import { PhoneloginComponent} from './phonelogin/phonelogin.component'
 
 @Component({
   selector: 'app-shipperlogin',
@@ -8,10 +9,18 @@ import { AuthService } from "../../../shared/services/auth.service";
   styleUrls: ['./shipperlogin.component.css']
 })
 export class ShipperloginComponent implements OnInit {
+  
+  constructor( public dialog: MatDialog,public authService: AuthService) { }
 
-  constructor(public authService: AuthService) { }
+  openDialog(): void {
+    const dialogRef = this.dialog.open(PhoneloginComponent, {
+      width: '250px',
+    });
 
-  ngOnInit(): void {
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
   }
 
+  ngOnInit(): void {}
 }

@@ -15,11 +15,6 @@ export class AuthService {
     return this.AuthLogin(new auth.GoogleAuthProvider());
   }
   
-  //Sign in with phone
-  PhoneAuth() {
-    return this.AuthLogin(new auth.PhoneAuthProvider.PROVIDER_ID);
-  } 
-
   // Auth logic to run auth providers
   AuthLogin(provider) {
     return this.afAuth.auth.signInWithPopup(provider)

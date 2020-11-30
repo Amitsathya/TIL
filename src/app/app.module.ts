@@ -6,6 +6,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
 import { MaterialModule } from './material.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +16,8 @@ import { HomepageComponent } from './routes/homepage/homepage.component';
 import { LoginComponent } from './routes/login/login.component';
 import { ShipperloginComponent } from './routes/shipper-login/shipperlogin/shipperlogin.component';
 import { ShippersignupComponent } from './routes/shipper-login/shippersignup/shippersignup.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { PhoneloginComponent } from './routes/shipper-login/shipperlogin/phonelogin/phonelogin.component';
 
 @NgModule({
   declarations: [
@@ -21,11 +25,15 @@ import { ShippersignupComponent } from './routes/shipper-login/shippersignup/shi
     HomepageComponent,
     LoginComponent,
     ShipperloginComponent,
-    ShippersignupComponent
+    ShippersignupComponent,
+    PhoneloginComponent
   ],
   imports: [
     BrowserModule,
+    FlexLayoutModule,
     AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     MaterialModule,
     AngularFireModule.initializeApp(environment.firebase),
