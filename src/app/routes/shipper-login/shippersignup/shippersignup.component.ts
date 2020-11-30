@@ -5,7 +5,7 @@ import { PhonesignupComponent} from './phonesignup/phonesignup.component'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AngularFireDatabase} from '@angular/fire/database';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-shippersignup',
@@ -15,8 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ShippersignupComponent implements OnInit {
   register: FormGroup;
   type=null;
-  
-  constructor(private router: Router, private route: ActivatedRoute,public dialog: MatDialog,private fb: FormBuilder,private toastr: ToastrService,private db: AngularFireDatabase,public authService: AuthService) {
+  constructor(private route: ActivatedRoute,public dialog: MatDialog,private fb: FormBuilder,private toastr: ToastrService,private db: AngularFireDatabase,public authService: AuthService) {
     this.register= this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
@@ -41,11 +40,17 @@ export class ShippersignupComponent implements OnInit {
   
   saveForm(){
     if (this.register.valid){
-      const tutorialsRef = this.db.list('ShipperInfo/'+this.register.value.uid);
-      tutorialsRef.push({firstName: this.register.value.firstName,
+      let tutorialsRef;
+      if(this.type==1){
+        tutorialsRef = this.db.object('ShipperInfo/'+this.register.value.uid);
+      }else{
+        tutorialsRef = this.db.object('CarrierInfo/'+this.register.value.uid);
+      }
+      tutorialsRef.set({firstName: this.register.value.firstName,
         lastName: this.register.value.lastName,
         phonNumber: this.register.value.phonNumber,
         rating: '0.0',})
+        this.toastr.success('User Registered Successfully!');
     }else {
       this.toastr.error('Please Fill The Form!');
     }

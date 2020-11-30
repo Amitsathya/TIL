@@ -45,7 +45,7 @@ import { ToastrModule } from 'ngx-toastr';
     AngularFireDatabaseModule,
     AngularFirestoreModule,
     ToastrModule.forRoot({
-      timeOut: 1000,
+      timeOut: 2000,
       progressBar: true,
       progressAnimation: 'increasing',
       preventDuplicates: true

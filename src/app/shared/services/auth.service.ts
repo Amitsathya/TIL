@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import  { auth }  from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
-
+import { ToastrService } from 'ngx-toastr';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   constructor(
-    public afAuth: AngularFireAuth, // Inject Firebase auth service
+    public afAuth: AngularFireAuth, private toastr: ToastrService// Inject Firebase auth service
   ) { }
 
   // Sign in with Google
@@ -19,7 +19,12 @@ export class AuthService {
   AuthLogin(provider) {
     return this.afAuth.auth.signInWithPopup(provider)
     .then((result) => {
-        console.log('You have been successfully logged in!')
+        console.log(result)
+        if (result.user.phoneNumber==null){
+          var user = this.afAuth.auth.currentUser;
+          user.delete();
+          this.toastr.error('User is not Registered! Please Register');
+        }
     }).catch((error) => {
         console.log(error)
     })

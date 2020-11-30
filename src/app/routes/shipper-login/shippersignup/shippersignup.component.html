@@ -3,9 +3,10 @@
   <mat-card fxFlex="75" style="margin: auto;">
     <h1 *ngIf="this.type==2;else signup">Register Carrier</h1>
     <ng-template #signup> <h1 >Register Shipper</h1></ng-template>  
-          <button mat-raised-button color="primary" type="button" (click)="openDialog()">
+          <button *ngIf="!this.register.value.uid;else signup1" mat-raised-button color="primary" type="button" (click)="openDialog()">
             Log in with Phone
           </button>
+          <ng-template #signup1>
           <form [formGroup]="register">
             <mat-form-field style="display: block;" appearance="outline" >
                 <mat-label>First Name</mat-label>
@@ -24,6 +25,7 @@
             </mat-form-field>  
             <button mat-raised-button type="submit"  color="primary" (click)="saveForm()">Save</button>
           </form>
+        </ng-template>
   </mat-card> 
   </div>
   </div>
