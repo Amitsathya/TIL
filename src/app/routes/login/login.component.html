@@ -1,14 +1,13 @@
-<div fxLayout="column wrap" >
-    <div fxFlex="100">
-<mat-card fxFlex="50" fxLayoutGap="32px"class="login1">
-    <mat-card-actions style="padding-top: 30px;">
-        <button mat-button [mat-dialog-close] [routerLink]="['shipperlogin']">Shipper Login</button>
+<div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="center center" >
+<mat-card fxFlex="0 1 calc(50% - 32px)" class="login">
+    <mat-card-actions style="padding-bottom: 15px;">
+        <button mat-raised-button [mat-dialog-close] [routerLink]="['shipperlogin']">Shipper Login</button>
     </mat-card-actions>
 </mat-card>
-<mat-card fxFlex="50" class="login2">
-    <mat-card-actions style="padding-top: 30px;">
-        <button [mat-dialog-close] mat-button>Carrier Login</button>
+<mat-card fxFlex="0 1 calc(50% - 32px)" class="login">
+    <mat-card-actions style="padding-bottom: 15px;">
+        <button [mat-dialog-close] mat-raised-button>Carrier Login</button>
     </mat-card-actions>
 </mat-card>
 </div>
-</div>
+

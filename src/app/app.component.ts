@@ -9,7 +9,7 @@ import {MatDialog ,MatDialogConfig} from '@angular/material/dialog';
 })
 export class AppComponent implements OnInit {
   title = 'til';
-
+  isActive = true;
     constructor(public dialog: MatDialog) { }
   
     ngOnInit(): void {
