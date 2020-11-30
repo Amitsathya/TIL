@@ -1,0 +1,16 @@
+<div [hidden]="user">  
+    <label for="phone">Phone Number</label><br>
+    <input type="text" [(ngModel)]="phoneNumber.country"  class="input" placeholder="Enter Your Country Code"    maxlength="2">
+    <input type="text" [(ngModel)]="phoneNumber.line"     class="input" placeholder="Enter Your Mobile Number"  maxlength="10">  
+    <div id="recaptcha-container"></div>
+  
+    <button (click)="sendLoginCode()">SMS Text Login Code</button>
+  
+    <div *ngIf="windowRef.confirmationResult">
+      <hr>
+      <label for="code">Enter your Verification Code Here</label><br>
+      <input type="text" name="code" [(ngModel)]="verificationCode">
+  
+      <button (click)="verifyLoginCode()">Verify</button>
+    </div> 
+  </div>

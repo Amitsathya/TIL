@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
@@ -18,6 +19,8 @@ import { ShipperloginComponent } from './routes/shipper-login/shipperlogin/shipp
 import { ShippersignupComponent } from './routes/shipper-login/shippersignup/shippersignup.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { PhoneloginComponent } from './routes/shipper-login/shipperlogin/phonelogin/phonelogin.component';
+import { PhonesignupComponent } from './routes/shipper-login/shippersignup/phonesignup/phonesignup.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,8 @@ import { PhoneloginComponent } from './routes/shipper-login/shipperlogin/phonelo
     LoginComponent,
     ShipperloginComponent,
     ShippersignupComponent,
-    PhoneloginComponent
+    PhoneloginComponent,
+    PhonesignupComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +42,14 @@ import { PhoneloginComponent } from './routes/shipper-login/shipperlogin/phonelo
     MaterialModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
+    AngularFireDatabaseModule,
     AngularFirestoreModule,
+    ToastrModule.forRoot({
+      timeOut: 1000,
+      progressBar: true,
+      progressAnimation: 'increasing',
+      preventDuplicates: true
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

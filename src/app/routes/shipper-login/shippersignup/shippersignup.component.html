@@ -1,1 +1,28 @@
-<p>shippersignup works!</p>
+<div fxLayout="column wrap" fxLayoutGap="32px">
+    <div fxFlex="100">
+  <mat-card fxFlex="75" style="margin: auto;">  
+          <h1>Register Shipper</h1>
+          <button mat-raised-button color="primary" type="button" (click)="openDialog()">
+            Log in with Phone
+          </button>
+          <form [formGroup]="register">
+            <mat-form-field style="display: block;" appearance="outline" >
+                <mat-label>First Name</mat-label>
+                <input matInput formControlName="firstName" required />
+                <mat-error *ngIf="register.get('firstName').invalid">First Name is required</mat-error>         
+              </mat-form-field>
+            <mat-form-field style="display: block;" appearance="outline" >
+                <mat-label>Last Name</mat-label>
+                <input matInput formControlName="lastName" required />
+                <mat-error *ngIf="register.get('lastName').invalid">Last Name is required</mat-error>
+            </mat-form-field>  
+            <mat-form-field style="display: block;" appearance="outline" >
+                <mat-label>Phone Number</mat-label>
+                <input matInput formControlName="phonNumber" required />
+                <mat-error *ngIf="register.get('phonNumber').invalid">Phone Number is required</mat-error>
+            </mat-form-field>  
+            <button mat-raised-button type="submit"  color="primary" (click)="saveForm()">Save</button>
+          </form>
+  </mat-card> 
+  </div>
+  </div>
