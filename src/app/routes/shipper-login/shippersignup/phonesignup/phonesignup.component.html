@@ -1,16 +1,24 @@
-<div [hidden]="user">  
-    <label for="phone">Phone Number</label><br>
-    <input type="text" [(ngModel)]="phoneNumber.country"  class="input" placeholder="Enter Your Country Code"    maxlength="2">
-    <input type="text" [(ngModel)]="phoneNumber.line"     class="input" placeholder="Enter Your Mobile Number"  maxlength="10">  
-    <div id="recaptcha-container"></div>
-  
-    <button (click)="sendLoginCode()">SMS Text Login Code</button>
-  
-    <div *ngIf="windowRef.confirmationResult">
-      <hr>
-      <label for="code">Enter your Verification Code Here</label><br>
-      <input type="text" name="code" [(ngModel)]="verificationCode">
-  
-      <button (click)="verifyLoginCode()">Verify</button>
-    </div> 
-  </div>
+<div fxLayout="column" fxLayoutGap="32px" fxLayoutAlign="center center" >
+    <mat-card style="margin: auto;"> 
+      <div [hidden]="user">  
+        <div fxLayout="column" fxLayoutAlign="center center">
+          <h2 for="phone">Phone Number</h2>
+        <input type="text" [(ngModel)]="phoneNumber.country" class="input" placeholder="Enter Your Country Code" maxlength="2">
+          <br/><br/>
+        <input type="text" [(ngModel)]="phoneNumber.line" class="input" placeholder="Enter Your Mobile Number" maxlength="10">  
+          <br/><br/>
+        <div id="recaptcha-container" style="transform:scale(0.6);transform-origin:0 0"></div>
+
+        <button (click)="sendLoginCode()">SMS Text Login Code</button>
+      
+        <div *ngIf="windowRef.confirmationResult">
+          <hr>
+          <label for="code">Enter your Verification Code Here</label><br>
+          <input type="text" name="code" [(ngModel)]="verificationCode">
+      
+          <button (click)="verifyLoginCode()">Verify</button>
+        </div> 
+        </div>
+      </div>
+    </mat-card>
+</div>

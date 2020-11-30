@@ -1,15 +1,19 @@
 <div fxLayout="column wrap" fxLayoutGap="32px">
   <div fxFlex="100">
-<mat-card fxFlex="75" style="margin: auto;">  
-        <h1 *ngIf="this.type==2;else content">Sign-in Carrier</h1>
-        <ng-template #content> <h1 >Sign-in Shipper</h1></ng-template>
-        <button mat-raised-button color="primary" type="button" (click)="authService.GoogleAuth()">
-          Log in with Google
-        </button>
-        <button mat-raised-button color="primary" type="button" (click)="openDialog()">
-          Log in with Phone
-        </button>
-        <a routerLink="" (click)="nextPage()">Not Registered? Please click here</a>
-</mat-card>
-</div>
+    <mat-card fxFlex="25" style="margin: auto;">  
+            <h1 *ngIf="this.type==2;else content">Sign-in Carrier</h1>
+            <ng-template #content> <h1 >Sign-in Shipper</h1></ng-template>
+            <div fxLayout="column" fxLayoutAlign="center center">
+              <button mat-raised-button color="primary" type="button" (click)="authService.GoogleAuth()">
+                Log in with Google
+              </button>
+              <br />
+              <button mat-raised-button color="primary" type="button" (click)="openDialog()">
+                Log in with Phone
+              </button>
+              <br />
+              <a routerLink="" (click)="nextPage()">Not Registered? Please click here</a>
+            </div>
+    </mat-card>
+  </div>
 </div>
