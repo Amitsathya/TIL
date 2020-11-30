@@ -1,7 +1,8 @@
 <div fxLayout="column wrap" fxLayoutGap="32px">
     <div fxFlex="100">
-  <mat-card fxFlex="75" style="margin: auto;">  
-          <h1>Register Shipper</h1>
+  <mat-card fxFlex="75" style="margin: auto;">
+    <h1 *ngIf="this.type==2;else signup">Register Carrier</h1>
+    <ng-template #signup> <h1 >Register Shipper</h1></ng-template>  
           <button mat-raised-button color="primary" type="button" (click)="openDialog()">
             Log in with Phone
           </button>

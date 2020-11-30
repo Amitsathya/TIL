@@ -5,6 +5,7 @@ import { PhonesignupComponent} from './phonesignup/phonesignup.component'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AngularFireDatabase} from '@angular/fire/database';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-shippersignup',
@@ -13,8 +14,9 @@ import { AngularFireDatabase} from '@angular/fire/database';
 })
 export class ShippersignupComponent implements OnInit {
   register: FormGroup;
+  type=null;
   
-  constructor( public dialog: MatDialog,private fb: FormBuilder,private toastr: ToastrService,private db: AngularFireDatabase,public authService: AuthService) {
+  constructor(private router: Router, private route: ActivatedRoute,public dialog: MatDialog,private fb: FormBuilder,private toastr: ToastrService,private db: AngularFireDatabase,public authService: AuthService) {
     this.register= this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
@@ -49,6 +51,17 @@ export class ShippersignupComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route
+    .queryParams
+    .subscribe(params => {
+      // Defaults to 0 if no query param provided.
+      if(params.signup==1){
+        this.type=1;
+      }else if(params.signup==2){
+        this.type=2;
+      }
+    });
+  }
 
 }

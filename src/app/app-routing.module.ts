@@ -11,11 +11,11 @@ const routes: Routes = [
     component: HomepageComponent
   },
   {
-    path:'shipperlogin',
+    path:'login',
     component: ShipperloginComponent
   },
   {
-    path:'shippersignup',
+    path:'signup',
     component: ShippersignupComponent
   }
   // {
