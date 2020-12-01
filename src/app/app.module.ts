@@ -6,6 +6,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
+import { AgmCoreModule } from '@agm/core';
 import { MaterialModule } from './material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +22,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { PhoneloginComponent } from './routes/shipper-login/shipperlogin/phonelogin/phonelogin.component';
 import { PhonesignupComponent } from './routes/shipper-login/shippersignup/phonesignup/phonesignup.component';
 import { ToastrModule } from 'ngx-toastr';
+import { ShippermapComponent } from './routes/shippermap/shippermap.component';
 
 import { MatIconModule } from "@angular/material/icon";
 import { HttpClientModule } from "@angular/common/http";
@@ -33,7 +35,8 @@ import { HttpClientModule } from "@angular/common/http";
     ShipperloginComponent,
     ShippersignupComponent,
     PhoneloginComponent,
-    PhonesignupComponent
+    PhonesignupComponent,
+    ShippermapComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +57,10 @@ import { HttpClientModule } from "@angular/common/http";
       progressBar: true,
       progressAnimation: 'increasing',
       preventDuplicates: true
+    }),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBmKYQGubovyobyRFfjEQQbMmRAY8SrgFk',
+      libraries: ['places']
     })
   ],
   providers: [],

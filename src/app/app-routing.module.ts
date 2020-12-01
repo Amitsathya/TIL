@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomepageComponent } from './routes/homepage/homepage.component'
 import {ShipperloginComponent} from './routes/shipper-login/shipperlogin/shipperlogin.component'
 import {ShippersignupComponent} from './routes/shipper-login/shippersignup/shippersignup.component'
-
+import {ShippermapComponent} from './routes/shippermap/shippermap.component'
 
 const routes: Routes = [
   {
@@ -17,6 +17,10 @@ const routes: Routes = [
   {
     path:'signup',
     component: ShippersignupComponent
+  },
+  {
+    path:'shippermap',
+    component: ShippermapComponent
   }
   // {
   //   path:'shipperlogin',

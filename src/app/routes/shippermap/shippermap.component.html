@@ -1,0 +1,40 @@
+<div id="wrapper">
+  <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+    <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
+      (dragEnd)="markerDragEnd($event)"></agm-marker>
+  </agm-map>
+  <div id="over_map" style="width: 500px;"> 
+    <form fxLayout="row wrap" [formGroup]="geolocation" style="margin: 20px;">
+      <h1>Place Order</h1>
+      <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
+        <mat-label>Search</mat-label>
+        <input matInput formControlName="search" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
+    </mat-form-field> 
+      <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
+          <mat-label>Address</mat-label>
+          <input matInput formControlName="address" required />
+      </mat-form-field>
+      <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="typeof" >
+          <mat-option *ngFor="let x of type" [value]="x">
+            {{x}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>  
+    <mat-form-field fxFlex="75"style="display: block;" appearance="outline" >
+      <mat-label>Quantity</mat-label>
+      <input matInput formControlName="quantity" required />
+  </mat-form-field> 
+  <mat-form-field fxFlex="22" style="display: block;margin-left: 10px;" appearance="outline" >
+    <mat-label>Units</mat-label>
+    <mat-select formControlName="unit" >
+      <mat-option *ngFor="let x of units" [value]="x">
+        {{x}}
+      </mat-option>
+    </mat-select>
+</mat-form-field>   
+      <button fxFlex="30"mat-raised-button type="submit"  color="primary" (click)="saveForm()">Order</button>
+    </form>
+</div>
+</div>
