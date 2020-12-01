@@ -1,23 +1,30 @@
 <div fxLayout="column" fxLayoutGap="32px">
   <div fxFlex="100">
     <mat-card fxFlex="100" style="margin: auto;"> 
-      <div [hidden]="user">  
-        <ng-template #content><h2 for="phone">Phone Number</h2></ng-template>
-        <input type="text" [(ngModel)]="phoneNumber.country" class="input" placeholder="Enter Your Country Code" maxlength="2">
-          <br/><br/>
-        <input type="text" [(ngModel)]="phoneNumber.line" class="input" placeholder="Enter Your Mobile Number" maxlength="10">  
-          <br/><br/>
-        <div id="recaptcha-container" style="transform:scale(0.6);transform-origin:0 0"></div>
-
-        <button (click)="sendLoginCode()">SMS Text Login Code</button>
-      
+      <div >  
+        <h2 for="phone">Phone Number</h2>
+        <form [formGroup]="phonenumber">
+          <mat-form-field style="display: block;" appearance="outline" >
+              <mat-label>Country Code</mat-label>
+              <input matInput formControlName="country" placeholder="Enter Your Country Code" maxlength="2" required />
+              <mat-error *ngIf="phonenumber.get('country').errors?.required">Country Code is required</mat-error>  
+            </mat-form-field>
+          <mat-form-field style="display: block;" appearance="outline" >
+              <mat-label>Mobile Number</mat-label>
+              <input matInput formControlName="line" minlength="10" maxlength="10" required />
+              <mat-error *ngIf="phonenumber.get('line').errors?.required">Mobile Number is required</mat-error>  
+              <mat-error *ngIf="phonenumber.get('line').errors?.minlength ">Please Enter a Valid Mobile Number</mat-error> 
+          </mat-form-field>  
+          <div id="recaptcha-container" style="transform:scale(0.6);transform-origin:0 0"></div>
+          <button mat-raised-button type="submit"  color="primary" (click)="sendLoginCode()">SMS Text Login Code</button>      
         <div *ngIf="windowRef.confirmationResult">
-          <hr>
-          <label for="code">Enter your Verification Code Here</label><br>
-          <input type="text" name="code" [(ngModel)]="verificationCode">
-      
-          <button (click)="verifyLoginCode()" mat-dialog-close>Verify</button>
+          <mat-form-field style="display: block;" appearance="outline" >
+            <mat-label>Enter your Verification Code Here</mat-label>
+            <input matInput formControlName="code" required />
+        </mat-form-field>  
+          <button mat-raised-button type="submit"  color="primary" (click)="verifyLoginCode()">Verify</button>
         </div> 
+      </form>
       </div>
       
      

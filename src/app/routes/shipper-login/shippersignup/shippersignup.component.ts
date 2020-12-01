@@ -30,11 +30,12 @@ export class ShippersignupComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      this.register.controls['phonNumber'].setValue(result.user.phoneNumber);
+      if(result){
+        this.register.controls['phonNumber'].setValue(result.user.phoneNumber);
       this.register.controls['firstName'].setValue(result.additionalUserInfo.profile.given_name);
       this.register.controls['lastName'].setValue(result.additionalUserInfo.profile.family_name);
       this.register.controls['uid'].setValue(result.user.uid)
+      }
     });
   }
   

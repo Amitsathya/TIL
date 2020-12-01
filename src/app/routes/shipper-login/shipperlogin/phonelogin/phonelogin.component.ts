@@ -5,17 +5,8 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {ShipperloginComponent} from '../shipperlogin.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-export class PhoneNumber {
-  country: string;
-  line: string;
-  // format phone numbers as E.164
-  get e164() {
-    const num = this.country + this.line
-    return `+${num}`
-  }
-
-}
 @Component({
   selector: 'app-phonelogin',
   templateUrl: './phonelogin.component.html',
@@ -24,13 +15,19 @@ export class PhoneNumber {
 export class PhoneloginComponent implements OnInit {
   type= null;
   windowRef: any;
-  phoneNumber = new PhoneNumber()
+  phonenumber: FormGroup;
   verificationCode: string;
   user: any;
 
-  constructor(private win: WindowService,private router: Router, private route: ActivatedRoute,private toastr: ToastrService,
+  constructor(private win: WindowService,private router: Router,private fb: FormBuilder,private route: ActivatedRoute,private toastr: ToastrService,
     public dialogRef: MatDialogRef<ShipperloginComponent>,
-    ) {}
+    ) {
+      this.phonenumber= this.fb.group({
+        country: ['',Validators.required],
+        line: ['', [Validators.required,Validators.maxLength(10)]],
+        code: ['',Validators.required]
+      })
+    }
 
     ngOnInit(): void {
       this.windowRef = this.win.windowRef
@@ -50,9 +47,11 @@ export class PhoneloginComponent implements OnInit {
 
     sendLoginCode() {
         const appVerifier = this.windowRef.recaptchaVerifier;
-        const num = this.phoneNumber.e164;
+        const num = `+${this.phonenumber.value.country}${this.phonenumber.value.line}`;
         firebase.auth().signInWithPhoneNumber(num, appVerifier)
                 .then(result => {
+                  console.log(result);
+                  
                     this.windowRef.confirmationResult = result;
                 })
                 .catch( error => console.log(error) );
@@ -60,7 +59,7 @@ export class PhoneloginComponent implements OnInit {
 
       verifyLoginCode() {
         this.windowRef.confirmationResult
-                      .confirm(this.verificationCode)
+                      .confirm(this.phonenumber.value.code)
                       .then( result => {
                         console.log(result);
                         if (result.user.email==null){
@@ -69,10 +68,13 @@ export class PhoneloginComponent implements OnInit {
                           console.log(this.type);
                           this.toastr.error('User is not Registered! Please Register');
                           this.router.navigate(['signup'], { queryParams: { signup: this.type } });
+                        } else {
+                          this.toastr.success('Successfully Logged In!')
+                          this.dialogRef.close()
                         }
                         this.user = null;
         })
-        .catch( error => console.log(error, "Incorrect code entered?"));
+        .catch( error => this.toastr.error("Incorrect code entered"));
       }
   onNoClick(): void {
     this.dialogRef.close();

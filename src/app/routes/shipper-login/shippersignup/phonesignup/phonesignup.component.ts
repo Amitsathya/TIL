@@ -5,7 +5,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {ShippersignupComponent} from '../shippersignup.component';
 import  { auth }  from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
-
+import { ToastrService } from 'ngx-toastr';
 
 export class PhoneNumber {
   country: string;
@@ -28,7 +28,7 @@ export class PhonesignupComponent implements OnInit {
   phoneNumber = new PhoneNumber()
   verificationCode: string;
   user: any;
-  constructor(private win: WindowService, public afAuth: AngularFireAuth,
+  constructor(private win: WindowService, private toastr: ToastrService,public afAuth: AngularFireAuth,
     public dialogRef: MatDialogRef<ShippersignupComponent>
     ) {}
 
@@ -56,7 +56,7 @@ export class PhonesignupComponent implements OnInit {
                       .then( result => {
                         return this.AuthLogin(new auth.GoogleAuthProvider());
         })
-        .catch( error => console.log(error, "Incorrect code entered?"));
+        .catch( error =>  this.toastr.error("Incorrect code entered"));
       }
       
       GoogleAuth() {
@@ -70,6 +70,10 @@ export class PhonesignupComponent implements OnInit {
           this.dialogRef.close(result);          
         }).catch((error) => {
             console.log(error)
+            if(error.code=='auth/provider-already-linked'){
+              this.toastr.error('This Number is already linked with another Account, Please use another number');
+              this.dialogRef.close();
+            }
         })
       }
   onNoClick(): void {
