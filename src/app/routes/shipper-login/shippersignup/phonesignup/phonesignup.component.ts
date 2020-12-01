@@ -6,17 +6,7 @@ import {ShippersignupComponent} from '../shippersignup.component';
 import  { auth }  from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { ToastrService } from 'ngx-toastr';
-
-export class PhoneNumber {
-  country: string;
-  line: string;
-  // format phone numbers as E.164
-  get e164() {
-    const num = this.country + this.line
-    return `+${num}`
-  }
-
-}
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-phonesignup',
@@ -25,12 +15,18 @@ export class PhoneNumber {
 })
 export class PhonesignupComponent implements OnInit {
   windowRef: any;
-  phoneNumber = new PhoneNumber()
+  phonenumber : FormGroup;
   verificationCode: string;
   user: any;
-  constructor(private win: WindowService, private toastr: ToastrService,public afAuth: AngularFireAuth,
-    public dialogRef: MatDialogRef<ShippersignupComponent>
-    ) {}
+  constructor(private win: WindowService, private fb: FormBuilder, private toastr: ToastrService,public afAuth: AngularFireAuth,
+    public dialogRef: MatDialogRef<ShippersignupComponent>,
+    ) {
+      this.phonenumber= this.fb.group({
+        country: ['', Validators.required],
+        line: ['', Validators.required],
+        code: ['',Validators.required]
+      })
+    }
 
     
 
@@ -42,7 +38,7 @@ export class PhonesignupComponent implements OnInit {
 
     sendLoginCode() {
         const appVerifier = this.windowRef.recaptchaVerifier;
-        const num = this.phoneNumber.e164;
+        const num = `+${this.phonenumber.value.country}${this.phonenumber.value.line}`;
         this.afAuth.auth.signInWithPhoneNumber(num, appVerifier)
                 .then(result => {
                   this.windowRef.confirmationResult = result;
@@ -52,7 +48,7 @@ export class PhonesignupComponent implements OnInit {
 
       verifyLoginCode() {
         this.windowRef.confirmationResult
-                      .confirm(this.verificationCode)
+                      .confirm(this.phonenumber.value.code)
                       .then( result => {
                         return this.AuthLogin(new auth.GoogleAuthProvider());
         })

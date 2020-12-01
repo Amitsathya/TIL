@@ -1,10 +1,12 @@
 <div fxLayout="column wrap" fxLayoutGap="32px">
-    <div fxFlex="100">
-  <mat-card fxFlex="75" style="margin: auto;">
+<div fxFlex="100">
+  <mat-card fxLayout="column wrap" fxLayoutAlign="center center" fxFlex="50" style="margin: auto;padding: 50px;">
     <h1 *ngIf="this.type==2;else signup">Register Carrier</h1>
-    <ng-template #signup> <h1 >Register Shipper</h1></ng-template>  
+    <ng-template #signup> <h1 >Register Shipper</h1></ng-template> 
+    <mat-divider style="position: relative;"></mat-divider>
+              <br/> 
           <button *ngIf="!this.register.value.uid;else signup1" mat-raised-button color="primary" type="button" (click)="openDialog()">
-            Log in with Phone
+            <span class="material-icons">local_phone</span> Register with Phone
           </button>
           <ng-template #signup1>
           <form [formGroup]="register">
@@ -26,6 +28,12 @@
             <button mat-raised-button type="submit"  color="primary" (click)="saveForm()">Save</button>
           </form>
         </ng-template>
+        <br/>
+        <button mat-button color="primary" type="button" style="float:right;" (click)="prevPage()">
+          <span class="material-icons">
+            arrow_back
+            </span>
+        </button>
   </mat-card> 
   </div>
   </div>

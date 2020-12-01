@@ -1,18 +1,27 @@
+<link rel="icon"/>
 <div fxLayout="column wrap" fxLayoutGap="32px">
   <div fxFlex="100">
-    <mat-card fxFlex="25" style="margin: auto;">  
-            <h1 *ngIf="this.type==2;else content">Sign-in Carrier</h1>
-            <ng-template #content> <h1 >Sign-in Shipper</h1></ng-template>
+    <mat-card fxFlex="50" style="margin: auto;padding: 50px;">  
             <div fxLayout="column" fxLayoutAlign="center center">
-              <button mat-raised-button color="primary" type="button" (click)="authService.GoogleAuth()">
-                Log in with Google
+              <h1 *ngIf="this.type==2;else content">Sign-in Carrier</h1>
+              <ng-template #content> <h1 >Sign-in Shipper</h1></ng-template>
+              <mat-divider style="position: relative;"></mat-divider>
+              <br/>
+              <button mat-raised-button style="background-color: #EB5E4C; color:white" type="button" (click)="authService.GoogleAuth()">
+              <mat-icon style="padding:1rem;" svgIcon="search"></mat-icon> Log in with Google
               </button>
               <br />
               <button mat-raised-button color="primary" type="button" (click)="openDialog()">
-                Log in with Phone
+                <span style="padding:1rem;" class="material-icons">local_phone</span> Log in with Phone
               </button>
               <br />
-              <a routerLink="" (click)="nextPage()">Not Registered? Please click here</a>
+              <a routerLink="" (click)="nextPage()">Not Registered? Sign up here</a>
+              <br />
+              <button mat-button color="primary" type="button" (click)="prevPage()">
+                <span class="material-icons">
+                  arrow_back
+                  </span>
+              </button>
             </div>
     </mat-card>
   </div>

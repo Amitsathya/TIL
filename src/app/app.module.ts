@@ -22,6 +22,9 @@ import { PhoneloginComponent } from './routes/shipper-login/shipperlogin/phonelo
 import { PhonesignupComponent } from './routes/shipper-login/shippersignup/phonesignup/phonesignup.component';
 import { ToastrModule } from 'ngx-toastr';
 
+import { MatIconModule } from "@angular/material/icon";
+import { HttpClientModule } from "@angular/common/http";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,6 +43,8 @@ import { ToastrModule } from 'ngx-toastr';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MaterialModule,
+    MatIconModule,
+    HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireDatabaseModule,

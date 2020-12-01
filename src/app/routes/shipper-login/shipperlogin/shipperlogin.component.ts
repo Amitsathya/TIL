@@ -3,6 +3,9 @@ import { AuthService } from "../../../shared/services/auth.service";
 import {MatDialog} from '@angular/material/dialog';
 import { PhoneloginComponent} from './phonelogin/phonelogin.component'
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatIconRegistry } from "@angular/material/icon";
+import { DomSanitizer } from "@angular/platform-browser";
+
 
 @Component({
   selector: 'app-shipperlogin',
@@ -12,11 +15,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ShipperloginComponent implements OnInit {
   type=null;
   constructor( public dialog: MatDialog,public authService: AuthService,private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router, private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer) {
+      this.matIconRegistry.addSvgIcon(
+        "search",
+        this.domSanitizer.bypassSecurityTrustResourceUrl("../../../../assets/search.svg")
+      );
+    }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(PhoneloginComponent, {
-      width: '250px',
+      width:'39%',
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -39,5 +48,9 @@ export class ShipperloginComponent implements OnInit {
     
     nextPage(){
       this.router.navigate(['signup'], { queryParams: { signup: this.type } });
+    }
+
+    prevPage(){
+      this.router.navigate(['']);
     }
 }

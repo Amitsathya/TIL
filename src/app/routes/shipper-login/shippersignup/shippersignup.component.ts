@@ -5,7 +5,7 @@ import { PhonesignupComponent} from './phonesignup/phonesignup.component'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AngularFireDatabase} from '@angular/fire/database';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-shippersignup',
@@ -15,7 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ShippersignupComponent implements OnInit {
   register: FormGroup;
   type=null;
-  constructor(private route: ActivatedRoute,public dialog: MatDialog,private fb: FormBuilder,private toastr: ToastrService,private db: AngularFireDatabase,public authService: AuthService) {
+  constructor(private route: ActivatedRoute,private router: Router, public dialog: MatDialog,private fb: FormBuilder,private toastr: ToastrService,private db: AngularFireDatabase,public authService: AuthService) {
     this.register= this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
@@ -26,7 +26,7 @@ export class ShippersignupComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(PhonesignupComponent, {
-      width: '50%',
+      width: '39%',
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -68,6 +68,10 @@ export class ShippersignupComponent implements OnInit {
         this.type=2;
       }
     });
+  }
+
+  prevPage(){
+    this.router.navigate(['login'], { queryParams: { login: this.type } });
   }
 
 }
