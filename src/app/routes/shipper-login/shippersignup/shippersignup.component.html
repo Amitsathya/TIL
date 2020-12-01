@@ -6,7 +6,7 @@
     <mat-divider style="position: relative;"></mat-divider>
               <br/> 
           <button *ngIf="!this.register.value.uid;else signup1" mat-raised-button color="primary" type="button" (click)="openDialog()">
-            <span class="material-icons">local_phone</span> Register with Phone
+            <span style="padding:1rem;" class="material-icons">local_phone</span> Register with Phone
           </button>
           <ng-template #signup1>
           <form [formGroup]="register">
