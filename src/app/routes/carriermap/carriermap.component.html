@@ -1,0 +1,50 @@
+<div id="wrapper">
+    <!-- <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+        <agm-direction *ngIf="dir" [origin]="dir.origin" [destination]="dir.destination"></agm-direction>
+        <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="false"></agm-marker>
+    </agm-map> -->
+    <div id="over_map1" style="width: 500px;height: calc(100vh - 100px)"> 
+        <h1>Orders Nearby</h1>
+        <mat-selection-list (click)="selected(shoes.selectedOptions.selected[0]?.value)" #shoes [multiple]="false">
+            <mat-list-option *ngFor="let shoe of orders" [value]="shoe.key" style="padding-top: 10px; padding-bottom: 10px;">
+                <div fxLayout="row wrap">
+                    <div fxFlex="10">
+                        <span class="material-icons">
+                            room
+                            </span>
+                        </div>
+                        <div fxFlex="70">
+                            {{shoe.key}}
+                            <br>
+                            {{shoe.vehicle}}
+                        </div>
+                        <div fxFlex="20">
+                            <button mat-raised-button type="button" (click)="Accept(shoe.key)" color="primary">Accept Order</button>
+                        </div>                    
+                </div>
+            </mat-list-option>
+          </mat-selection-list>
+    </div>
+    <div id="over_map2" style="width: 500px;">
+        <form fxLayout="row wrap" [formGroup]="confirm" style="margin: 20px;">
+            <h1>Confirm Order</h1>
+            <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
+                <mat-label>Origin</mat-label>
+                <input matInput formControlName="origin" required readonly/>
+            </mat-form-field>
+            <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
+              <mat-label>Destination</mat-label>
+              <input matInput formControlName="destination" required readonly/>
+          </mat-form-field>
+          <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
+            <mat-label>Vehicle</mat-label>
+            <input matInput formControlName="vehicle" required readonly/>
+        </mat-form-field>
+        <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
+            <mat-label>Amount</mat-label>
+            <input matInput formControlName="amount" required readonly/>
+        </mat-form-field>
+            <button fxFlex="30"mat-raised-button type="button"  color="primary" >Confirm</button>
+          </form>
+    </div>
+  </div>

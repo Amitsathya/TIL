@@ -1,0 +1,23 @@
+agm-map {
+  height: calc(100vh - 6vh);
+}
+#wrapper {
+  position: relative;
+}
+#over_map1 {
+  background: cyan;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 99;
+}
+
+#over_map2 {
+  background: cyan;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  opacity: 0.8;
+  visibility: hidden;
+  z-index: 99;
+}

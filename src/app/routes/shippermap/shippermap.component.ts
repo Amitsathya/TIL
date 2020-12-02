@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { MapsAPILoader } from '@agm/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AngularFireDatabase} from '@angular/fire/database';
 
 @Component({
   selector: 'app-shippermap',
@@ -9,6 +10,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class ShippermapComponent implements OnInit {
   geolocation: FormGroup;
+  confirmOrder= false;
   latitude: number;
   longitude: number;
   org_lat: number;
@@ -19,6 +21,12 @@ export class ShippermapComponent implements OnInit {
   private geoCoder;
   type: any = ['Heavy Goods','Fragile']
   units: any = ['Kg','Tons','litres']
+  vehicles: any = [
+    {value: 'Tata Ace Gold', id: 'back1'},
+    {value: 'Ashok Leyland Dost Strong', id: 'back2'},
+    {value: 'Mahindra Bolero Pickup', id: 'back3'},
+    {value: 'Tata 407', id: 'back4'},
+    {value: 'Eicher 19ft', id: 'back5'}]
   @ViewChild('search1')
   public searchElementRef1: ElementRef;
   @ViewChild('search2')
@@ -26,15 +34,18 @@ export class ShippermapComponent implements OnInit {
   
   
   constructor(
-    private mapsAPILoader: MapsAPILoader,
+    private mapsAPILoader: MapsAPILoader,private db: AngularFireDatabase,
     private ngZone: NgZone,private fb: FormBuilder
     ) { 
       this.geolocation= this.fb.group({
         search_origin:[''],
         search_dest:[''],
         origin: ['', Validators.required],
-        lattitude: [''],
-        longitude: [''],
+        origin_lat: [''],
+        origin_lng: [''],
+        dest_lat:[''],
+        dest_lng:[''],
+        vehicle: ['',Validators.required],
         destination:['',Validators.required]
         // quantity:['',Validators.required],
         // typeof:['',Validators.required],
@@ -102,8 +113,18 @@ export class ShippermapComponent implements OnInit {
     }
   }
   saveForm(){
-    console.log('hi');
-    
+    this.geolocation.controls['origin_lat'].setValue(this.org_lat);
+    this.geolocation.controls['origin_lng'].setValue(this.org_long);
+    this.geolocation.controls['dest_lat'].setValue(this.dest_lat);
+    this.geolocation.controls['dest_lng'].setValue(this.dest_long);
+    console.log(this.geolocation.value);
+    let tutorialsRef = this.db.object('OrderInfo/'+localStorage.getItem('session')+'01')
+    tutorialsRef.set({
+      org_lat: this.geolocation.value.origin_lat,
+      org_long: this.geolocation.value.origin_lng,
+      dest_lat: this.geolocation.value.dest_lat,
+      dest_long: this.geolocation.value.dest_lng,
+      vehicle: this.geolocation.value.vehicle,})
   }
   
   markerDragEnd($event: google.maps.MouseEvent) {
@@ -126,8 +147,6 @@ export class ShippermapComponent implements OnInit {
       if (status === 'OK') {
         if (results[0]) {
           this.zoom = 15;
-          // this.geolocation.controls['lattitude'].setValue(latitude);
-          // this.geolocation.controls['longitude'].setValue(longitude);
           if(x==1){
             this.geolocation.controls['origin'].setValue(results[0].formatted_address);
             this.org_lat=latitude;
@@ -166,7 +185,7 @@ public markerOptions = {
   lng: Number = 120.979021;
   dir = undefined;
   public getDirection() {
-    console.log('hi');
+    this.confirmOrder=true;
     
     this.dir = {
       origin: { lat: this.org_lat, lng:this.dest_long },
@@ -174,10 +193,17 @@ public markerOptions = {
     }
   }
 
-   public myfunction(message : string){
-      //alert(message);
-      const element = document.getElementById(message)
+   public myfunction(id,value){
+    this.geolocation.controls['vehicle'].setValue(value);
+    this.vehicles.forEach(element => {
+      if(element.id!=id){
+        const ns = document.getElementById(element.id)
+        ns.style.backgroundColor = 'white'
+      }
+     });
+      const element = document.getElementById(id)
       if(element.style.backgroundColor == 'grey') {
+        this.geolocation.controls['vehicle'].setValue('');
         element.style.backgroundColor = 'white'
       } else {
         element.style.backgroundColor = 'grey'

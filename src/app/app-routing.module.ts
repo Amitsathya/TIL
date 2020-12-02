@@ -4,7 +4,7 @@ import { HomepageComponent } from './routes/homepage/homepage.component'
 import {ShipperloginComponent} from './routes/shipper-login/shipperlogin/shipperlogin.component'
 import {ShippersignupComponent} from './routes/shipper-login/shippersignup/shippersignup.component'
 import {ShippermapComponent} from './routes/shippermap/shippermap.component'
-
+import {CarriermapComponent} from './routes/carriermap/carriermap.component'
 import {AuthenticationGuard} from './shared/guard/authentication.guard';
 const routes: Routes = [
   {
@@ -24,6 +24,10 @@ const routes: Routes = [
     path:'shippermap',
     component: ShippermapComponent,
     canActivate:[AuthenticationGuard]
+  },
+  {
+    path:'carriermap',
+    component: CarriermapComponent,
   }
   // {
   //   path:'shipperlogin',

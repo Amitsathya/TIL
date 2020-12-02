@@ -15,7 +15,7 @@
     </mat-form-field> 
       <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
           <mat-label>Origin</mat-label>
-          <input matInput formControlName="origin" required />
+          <input matInput formControlName="origin" required readonly/>
       </mat-form-field>
         <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
           <mat-label>Search Origin</mat-label>
@@ -23,8 +23,16 @@
       </mat-form-field> 
       <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
         <mat-label>Destination</mat-label>
-        <input matInput formControlName="destination" required />
+        <input matInput formControlName="destination" required readonly/>
     </mat-form-field>
+    <mat-form-field fxFlex="100" style="display: block" appearance="outline" >
+      <mat-label>Vehicle</mat-label>
+      <mat-select formControlName="vehicle" >
+        <mat-option *ngFor="let x of vehicles" [value]="x.value">
+          {{x.value}}
+        </mat-option>
+      </mat-select>
+  </mat-form-field>
       <!-- <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
         <mat-label>Type</mat-label>
         <mat-select formControlName="typeof" >
@@ -45,7 +53,8 @@
       </mat-option>
     </mat-select>
 </mat-form-field>    -->
-      <button fxFlex="30"mat-raised-button type="submit"  color="primary" (click)="getDirection()">Select Vehicle</button>
+      <button *ngIf="this.confirmOrder==false;else content" fxFlex="30"mat-raised-button type="button"  color="primary" (click)="getDirection()">Select Vehicle</button>
+      <ng-template #content> <button fxFlex="30"mat-raised-button type="submit"  color="primary" (click)="saveForm()">Order</button></ng-template>
     </form>
 </div>
 
@@ -53,23 +62,23 @@
 
 <div fxLayout="row wrap" id="over_map2" style="min-width:100%;height:200px;">
   
-  <div id="back1" fxFlex="20" >
-    <img src="assets/tata-ace-gold-55853.jpeg" class="image" (click)="this.myfunction('back1')" height="180px"> 
+  <div id="back1" fxFlex="14" >
+    <img src="assets/tata-ace-gold-55853.jpeg" class="image" (click)="this.myfunction('back1','Tata Ace Gold')" height="180px"> 
   </div>
 
-  <div id="back2" fxFlex="20">
-    <img src="assets/ashok-leyland-dost-strong.jpeg" class="image" (click)="this.myfunction('back2')" height="180px"> 
+  <div id="back2" fxFlex="14">
+    <img src="assets/ashok-leyland-dost-strong.jpeg" class="image" (click)="this.myfunction('back2','Ashok Leyland Dost Strong')" height="180px"> 
   </div>
 
-  <div id="back3" fxFlex="20">
-    <img src="assets/mahindra-bolero-pick-up.jpg" class="image" (click)="this.myfunction('back3')" height="180px"> 
+  <div id="back3" fxFlex="14">
+    <img src="assets/mahindra-bolero-pick-up.jpg" class="image" (click)="this.myfunction('back3','Mahindra Bolero Pickup')" height="180px"> 
   </div>
 
-  <div id="back4" fxFlex="20">
-    <img src="assets/tata-407.jpg" class="image" (click)="this.myfunction('back4')" height="180px"> 
+  <div id="back4" fxFlex="14">
+    <img src="assets/tata-407.jpg" class="image" (click)="this.myfunction('back4','Tata 407')" height="180px"> 
   </div>
 
-  <div id="back5" fxFlex="20">
-    <img src="assets/eicher-19ft.jpg" class="image" (click)="this.myfunction('back5')" height="180px"> 
+  <div id="back5" fxFlex="14">
+    <img src="assets/eicher-19ft.jpg" class="image" (click)="this.myfunction('back5','Eicher 19ft')" height="180px"> 
   </div>
 </div>

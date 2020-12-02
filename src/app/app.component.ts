@@ -41,8 +41,8 @@ export class AppComponent implements OnInit {
     Logout(){
       console.log('hi');
       this.title='LOGOUT'
-      firebase.initializeApp(environment.firebase)
-      firebase.auth().signOut()
+      // firebase.initializeApp(environment.firebase)
+      // firebase.auth().signOut()
       this.router.navigate([''])
       localStorage.removeItem("session")
     }
