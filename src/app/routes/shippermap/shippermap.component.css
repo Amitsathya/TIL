@@ -17,3 +17,9 @@ agm-map {
   bottom: 0px;
   z-index: 99;
 }
+
+.image {
+  height: 200px;
+  width: 255px;
+  margin: 6px;
+}

@@ -173,4 +173,15 @@ public markerOptions = {
       destination: { lat: this.dest_lat, lng: this.dest_long }
     }
   }
+
+   public myfunction(message : string){
+      //alert(message);
+      const element = document.getElementById(message)
+      if(element.style.backgroundColor == 'grey') {
+        element.style.backgroundColor = 'white'
+      } else {
+        element.style.backgroundColor = 'grey'
+      }
+      
+  }
 }
