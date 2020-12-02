@@ -5,10 +5,12 @@ import {ShipperloginComponent} from './routes/shipper-login/shipperlogin/shipper
 import {ShippersignupComponent} from './routes/shipper-login/shippersignup/shippersignup.component'
 import {ShippermapComponent} from './routes/shippermap/shippermap.component'
 
+import {AuthenticationGuard} from './shared/guard/authentication.guard';
 const routes: Routes = [
   {
     path:'',
-    component: HomepageComponent
+    component: HomepageComponent,
+    pathMatch: 'full',
   },
   {
     path:'login',
@@ -20,7 +22,8 @@ const routes: Routes = [
   },
   {
     path:'shippermap',
-    component: ShippermapComponent
+    component: ShippermapComponent,
+    canActivate:[AuthenticationGuard]
   }
   // {
   //   path:'shipperlogin',

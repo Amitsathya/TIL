@@ -1,20 +1,31 @@
 <div id="wrapper">
   <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+    <agm-direction *ngIf="dir" [origin]="dir.origin" [destination]="dir.destination"></agm-direction>
     <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
       (dragEnd)="markerDragEnd($event)"></agm-marker>
+      <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
+      (dragEnd)="markerDragEnd1($event)"></agm-marker>
   </agm-map>
-  <div id="over_map" style="width: 500px;"> 
+  <div id="over_map1" style="width: 500px;"> 
     <form fxLayout="row wrap" [formGroup]="geolocation" style="margin: 20px;">
       <h1>Place Order</h1>
       <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
-        <mat-label>Search</mat-label>
-        <input matInput formControlName="search" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
+        <mat-label>Search Origin</mat-label>
+        <input matInput formControlName="search_origin" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search1>
     </mat-form-field> 
       <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
-          <mat-label>Address</mat-label>
-          <input matInput formControlName="address" required />
+          <mat-label>Origin</mat-label>
+          <input matInput formControlName="origin" required />
       </mat-form-field>
+        <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
+          <mat-label>Search Origin</mat-label>
+          <input matInput formControlName="search_dest" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search2>
+      </mat-form-field> 
       <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
+        <mat-label>Destination</mat-label>
+        <input matInput formControlName="destination" required />
+    </mat-form-field>
+      <!-- <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
         <mat-label>Type</mat-label>
         <mat-select formControlName="typeof" >
           <mat-option *ngFor="let x of type" [value]="x">
@@ -33,8 +44,11 @@
         {{x}}
       </mat-option>
     </mat-select>
-</mat-form-field>   
-      <button fxFlex="30"mat-raised-button type="submit"  color="primary" (click)="saveForm()">Order</button>
+</mat-form-field>    -->
+      <button fxFlex="30"mat-raised-button type="submit"  color="primary" (click)="getDirection()">Select Vehicle</button>
     </form>
 </div>
+
+</div><div id="over_map2" style="min-width: 100% ;height:200px">
+  hi  
 </div>

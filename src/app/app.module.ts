@@ -10,6 +10,8 @@ import { AgmCoreModule } from '@agm/core';
 import { MaterialModule } from './material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import {AuthenticationGuard} from './shared/guard/authentication.guard'
+import { AgmDirectionModule} from 'agm-direction'; 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -52,6 +54,7 @@ import { HttpClientModule } from "@angular/common/http";
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFirestoreModule,
+    AgmDirectionModule,
     ToastrModule.forRoot({
       timeOut: 2000,
       progressBar: true,
@@ -63,7 +66,7 @@ import { HttpClientModule } from "@angular/common/http";
       libraries: ['places']
     })
   ],
-  providers: [],
+  providers: [AuthenticationGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

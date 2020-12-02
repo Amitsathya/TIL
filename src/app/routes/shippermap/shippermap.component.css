@@ -4,10 +4,16 @@ agm-map {
 #wrapper {
   position: relative;
 }
-#over_map {
+#over_map1 {
   background: white;
   position: absolute;
   top: 10px;
   left: 10px;
+  z-index: 99;
+}
+#over_map2 {
+  background: white;
+  position: absolute;
+  bottom: 0px;
   z-index: 99;
 }

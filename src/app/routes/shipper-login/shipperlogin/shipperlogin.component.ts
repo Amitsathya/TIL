@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from "../../../shared/services/auth.service";
 import {MatDialog} from '@angular/material/dialog';
 import { PhoneloginComponent} from './phonelogin/phonelogin.component'
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
-
+import  { auth }  from 'firebase/app';
+import { AngularFireAuth } from "@angular/fire/auth";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-shipperlogin',
@@ -14,8 +15,9 @@ import { DomSanitizer } from "@angular/platform-browser";
 })
 export class ShipperloginComponent implements OnInit {
   type=null;
-  constructor( public dialog: MatDialog,public authService: AuthService,private route: ActivatedRoute,
-    private router: Router, private matIconRegistry: MatIconRegistry,
+  user='1';
+  constructor( public dialog: MatDialog,private route: ActivatedRoute,
+    private router: Router, private matIconRegistry: MatIconRegistry,public afAuth: AngularFireAuth, private toastr: ToastrService,
     private domSanitizer: DomSanitizer) {
       this.matIconRegistry.addSvgIcon(
         "search",
@@ -31,6 +33,27 @@ export class ShipperloginComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
 
     });
+  }
+  
+  GoogleAuth() {
+    return this.AuthLogin(new auth.GoogleAuthProvider());
+  }
+  
+  // Auth logic to run auth providers
+  AuthLogin(provider) {
+    return this.afAuth.auth.signInWithPopup(provider)
+    .then((result) => {
+        if (result.user.phoneNumber==null){
+          var user = this.afAuth.auth.currentUser;
+          user.delete();
+          this.toastr.error('User is not Registered! Please Register');
+        } else {
+          localStorage.setItem("session", 'true');
+          this.successPage();
+        }
+    }).catch((error) => {
+        console.log(error)
+    })
   }
 
   ngOnInit(): void {
@@ -52,5 +75,9 @@ export class ShipperloginComponent implements OnInit {
 
     prevPage(){
       this.router.navigate(['']);
+    }
+    
+    successPage(){
+      this.router.navigate(['shippermap']);
     }
 }

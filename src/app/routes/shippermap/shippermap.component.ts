@@ -11,39 +11,53 @@ export class ShippermapComponent implements OnInit {
   geolocation: FormGroup;
   latitude: number;
   longitude: number;
+  org_lat: number;
+  org_long: number;
+  dest_lat:number;
+  dest_long:number;
   zoom:number;
-  address: string;
   private geoCoder;
   type: any = ['Heavy Goods','Fragile']
   units: any = ['Kg','Tons','litres']
-  @ViewChild('search')
-  public searchElementRef: ElementRef;
+  @ViewChild('search1')
+  public searchElementRef1: ElementRef;
+  @ViewChild('search2')
+  public searchElementRef2: ElementRef;
+  
   
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,private fb: FormBuilder
     ) { 
       this.geolocation= this.fb.group({
-        search:[''],
-        address: ['', Validators.required],
+        search_origin:[''],
+        search_dest:[''],
+        origin: ['', Validators.required],
         lattitude: [''],
         longitude: [''],
-        quantity:['',Validators.required],
-        typeof:['',Validators.required],
-        units:['',Validators.required]
+        destination:['',Validators.required]
+        // quantity:['',Validators.required],
+        // typeof:['',Validators.required],
+        // unit:['',Validators.required]
       }) 
     }
   
   ngOnInit(): void {
+    if(localStorage.getItem('login')!='true'){
+      location.reload()
+      localStorage.setItem('logout','false');
+      localStorage.setItem('login','true');
+    }
     this.mapsAPILoader.load().then(() => {
       this.setCurrentLocation();
       this.geoCoder = new google.maps.Geocoder;
 
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-      autocomplete.addListener("place_changed", () => {
+      let autocomplete1 = new google.maps.places.Autocomplete(this.searchElementRef1.nativeElement);
+      let autocomplete2 = new google.maps.places.Autocomplete(this.searchElementRef2.nativeElement);
+      autocomplete1.addListener("place_changed", () => {
         this.ngZone.run(() => {
           //get the place result
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          let place: google.maps.places.PlaceResult = autocomplete1.getPlace();
 
           //verify result
           if (place.geometry === undefined || place.geometry === null) {
@@ -53,8 +67,25 @@ export class ShippermapComponent implements OnInit {
           //set latitude, longitude and zoom
           this.latitude = place.geometry.location.lat();
           this.longitude = place.geometry.location.lng();
-          this.getAddress(this.latitude, this.longitude);
-          this.zoom = 12;
+          this.getAddress(this.latitude, this.longitude,1);
+          this.zoom = 15;
+        });
+      });
+      autocomplete2.addListener("place_changed", () => {
+        this.ngZone.run(() => {
+          //get the place result
+          let place: google.maps.places.PlaceResult = autocomplete2.getPlace();
+
+          //verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+
+          //set latitude, longitude and zoom
+          this.latitude = place.geometry.location.lat();
+          this.longitude = place.geometry.location.lng();
+          this.getAddress(this.latitude, this.longitude,2);
+          this.zoom = 15;
         });
       });
     });
@@ -65,8 +96,8 @@ export class ShippermapComponent implements OnInit {
       navigator.geolocation.getCurrentPosition((position) => {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
-        this.zoom = 8;
-        this.getAddress(this.latitude, this.longitude);
+        this.zoom = 15;
+        this.getAddress(this.latitude, this.longitude,1);
       });
     }
   }
@@ -79,19 +110,33 @@ export class ShippermapComponent implements OnInit {
     console.log($event);
     this.latitude = $event.latLng.lat();
     this.longitude = $event.latLng.lng();
-    this.getAddress(this.latitude, this.longitude);
+    this.getAddress(this.latitude, this.longitude,1);
+  }
+  markerDragEnd1($event: google.maps.MouseEvent) {
+    console.log($event);
+    this.latitude = $event.latLng.lat();
+    this.longitude = $event.latLng.lng();
+    this.getAddress(this.latitude, this.longitude,2);
   }
   
-  getAddress(latitude, longitude) {
+  getAddress(latitude, longitude,x) {
     this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
       console.log(results);
       console.log(status);
       if (status === 'OK') {
         if (results[0]) {
-          this.zoom = 12;
-          this.geolocation.controls['lattitude'].setValue(latitude);
-          this.geolocation.controls['longitude'].setValue(longitude);
-          this.geolocation.controls['address'].setValue(results[0].formatted_address);
+          this.zoom = 15;
+          // this.geolocation.controls['lattitude'].setValue(latitude);
+          // this.geolocation.controls['longitude'].setValue(longitude);
+          if(x==1){
+            this.geolocation.controls['origin'].setValue(results[0].formatted_address);
+            this.org_lat=latitude;
+            this.org_long=longitude;
+          }else{
+            this.geolocation.controls['destination'].setValue(results[0].formatted_address);
+            this.dest_lat=latitude;
+            this.dest_long=longitude;
+          }         
         } else {
           window.alert('No results found');
         }
@@ -101,5 +146,31 @@ export class ShippermapComponent implements OnInit {
 
     });
   }
+  public renderOptions = {
+    suppressMarkers: true,
+}
 
+public markerOptions = {
+    origin: {
+        infoWindow: 'This is origin.',
+        icon: 'your-icon-url',
+        draggable: true,
+    },
+    destination: {
+        icon: 'your-icon-url',
+        label: 'marker label',
+        opacity: 0.8,
+    },
+}
+  lat: Number = 24.799448;
+  lng: Number = 120.979021;
+  dir = undefined;
+  public getDirection() {
+    console.log('hi');
+    
+    this.dir = {
+      origin: { lat: this.org_lat, lng:this.dest_long },
+      destination: { lat: this.dest_lat, lng: this.dest_long }
+    }
+  }
 }

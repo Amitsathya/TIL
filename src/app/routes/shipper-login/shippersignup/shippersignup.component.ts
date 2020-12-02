@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from "../../../shared/services/auth.service";
 import {MatDialog} from '@angular/material/dialog';
 import { PhonesignupComponent} from './phonesignup/phonesignup.component'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -15,7 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ShippersignupComponent implements OnInit {
   register: FormGroup;
   type=null;
-  constructor(private route: ActivatedRoute,private router: Router, public dialog: MatDialog,private fb: FormBuilder,private toastr: ToastrService,private db: AngularFireDatabase,public authService: AuthService) {
+  constructor(private route: ActivatedRoute,private router: Router, public dialog: MatDialog,private fb: FormBuilder,private toastr: ToastrService,private db: AngularFireDatabase) {
     this.register= this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],

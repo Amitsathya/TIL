@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginComponent } from './routes/login/login.component'
 import {MatDialog ,MatDialogConfig} from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import * as firebase from 'firebase';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +11,20 @@ import {MatDialog ,MatDialogConfig} from '@angular/material/dialog';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'til';
+  title : any;
+  currentUser:any;
   isActive = true;
-    constructor(public dialog: MatDialog) { }
-  
+    constructor(public dialog: MatDialog, private router: Router) { }
+
     ngOnInit(): void {
-    }
-    
+      this.currentUser =localStorage.getItem('session');
+      if(this.currentUser){
+          this.title="LOGOUT"
+        } else {
+          this.title="LOGIN"
+        }
+      }
+
     openDialog() {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.minWidth = "40%";
@@ -27,6 +37,14 @@ export class AppComponent implements OnInit {
       //   this.viewAllLocation();
       // });
     }
-  
+    
+    Logout(){
+      console.log('hi');
+      this.title='LOGOUT'
+      firebase.initializeApp(environment.firebase)
+      firebase.auth().signOut()
+      this.router.navigate([''])
+      localStorage.removeItem("session")
+    }
   }
   

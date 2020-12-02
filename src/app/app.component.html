@@ -2,7 +2,8 @@
     <mat-toolbar color="primary">
         <span>TIL</span>
         <span class="example-spacer"></span>
-        <button mat-raised-button (click)="openDialog()" color="accent">Login</button>
+        <button *ngIf="this.title=='LOGIN';else logout" mat-raised-button (click)="openDialog()" color="accent">Login</button>
+        <ng-template #logout> <button mat-raised-button (click)="Logout()" color="accent">Logout</button></ng-template>
     </mat-toolbar>
 </div>
 <router-outlet></router-outlet>
