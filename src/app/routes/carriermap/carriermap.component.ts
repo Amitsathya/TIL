@@ -10,6 +10,7 @@ import * as firebase from 'firebase';
   styleUrls: ['./carriermap.component.css']
 })
 export class CarriermapComponent implements OnInit {
+  key: any;
   latitude: number;
   longitude: number;
   org_lat: number;
@@ -41,15 +42,7 @@ export class CarriermapComponent implements OnInit {
     this.mapsAPILoader.load().then(() => {
     this.geoCoder = new google.maps.Geocoder;
     })
-    firebase.database().ref('/OrderInfo/').once('value').then((snapshot) => {
-      var username = (snapshot.val() ) || 'Anonymous';
-      for (const [key, value] of Object.entries(username)) {
-        this.orders.push({'key':key,'dest_lat':value['dest_lat'],'dest_long':value['dest_long'],'org_lat':value['org_lat'],'org_long':value['org_long'],'vehicle':value['vehicle']})
-   
-      }
-    });
-    console.log(this.orders)
-    
+    this.Orders()
       if ('geolocation' in navigator) { 
         navigator.geolocation.getCurrentPosition((position) => {
           this.latitude = position.coords.latitude;
@@ -58,6 +51,20 @@ export class CarriermapComponent implements OnInit {
           this.zoom = 15;
         });
       }
+  }
+  
+  Orders(){
+    firebase.database().ref('/OrderInfo/').once('value').then((snapshot) => {
+      console.log(snapshot.val());
+      
+      var username = (snapshot.val() ) || 'Anonymous';
+      for (const [key, value] of Object.entries(username)) {
+        if(value['status']!='Accepted'){
+          this.orders.push({'key':key,'dest_lat':value['dest_lat'],'dest_long':value['dest_long'],'org_lat':value['org_lat'],'org_long':value['org_long'],'vehicle':value['vehicle'],'origin':value['orign'],
+        'distance':this.distance(value['org_lat'],value['org_long'],value['dest_lat'],value['dest_long'])})
+        }
+      }
+    });
   }
 
   selected(id){
@@ -97,22 +104,33 @@ public markerOptions = {
     }
   }
   
-  Accept(key){
+  Accept(key,addr,dist){
     this.orders.forEach(element => {
       if(element.key==key){
+        this.key=key
         this.org_lat=element.org_lat;
         this.org_long=element.org_long;
         this.dest_lat=element.dest_lat;
         this.dest_long=element.dest_long;
         this.confirm.controls['vehicle'].setValue(element.vehicle);
       }})
-
-      this.distance(this.org_lat,this.org_long,this.dest_lat,this.dest_long)
-    this.getAddress(this.org_lat,this.org_long,1)
+      this.confirm.controls['origin'].setValue(addr);
+      this.confirm.controls['amount'].setValue(dist*21.32)
+      
     this.getAddress(this.dest_lat,this.dest_long,2)
     let element = document.getElementById('over_map2')
     element.style.visibility = 'visible'
-    
+  }
+  
+  Confirm(){
+    let tutorialsRef = this.db.list('OrderInfo')
+    tutorialsRef.update(this.key, { status: 'Accepted' });
+    let element = document.getElementById('over_map1')
+    element.style.visibility = 'hidden'
+    let element1 = document.getElementById('over_map2')
+    element1.style.visibility = 'hidden'
+    this.Orders();
+    this.key=null
   }
   distance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
@@ -122,7 +140,7 @@ public markerOptions = {
             (1 - c((lon2 - lon1) * p))/2;
   
     console.log(12742 * Math.asin(Math.sqrt(a)));
-    this.confirm.controls['amount'].setValue(Math.round((12742 * Math.asin(Math.sqrt(a)))*21.32));
+    return Math.round(12742 * Math.asin(Math.sqrt(a)));
 
   }
   
@@ -130,9 +148,7 @@ public markerOptions = {
     console.log(this.select.setControl('select',key));
     
     this.select.controls['select'].setValue(key);
-    // this.select
-    //   .get('select')
-    //   .patchValue(key)
+    
   }
   
   getAddress(latitude, longitude,x) {

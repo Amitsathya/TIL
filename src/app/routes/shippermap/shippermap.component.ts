@@ -118,13 +118,18 @@ export class ShippermapComponent implements OnInit {
     this.geolocation.controls['dest_lat'].setValue(this.dest_lat);
     this.geolocation.controls['dest_lng'].setValue(this.dest_long);
     console.log(this.geolocation.value);
-    let tutorialsRef = this.db.object('OrderInfo/'+localStorage.getItem('session')+'01')
-    tutorialsRef.set({
+    let tutorialsRef = this.db.list('OrderInfo')
+    tutorialsRef.push({
+      shipper_uid: localStorage.getItem('session'),
       org_lat: this.geolocation.value.origin_lat,
       org_long: this.geolocation.value.origin_lng,
       dest_lat: this.geolocation.value.dest_lat,
       dest_long: this.geolocation.value.dest_lng,
-      vehicle: this.geolocation.value.vehicle,})
+      vehicle: this.geolocation.value.vehicle,
+      orign:this.geolocation.value.origin,
+      destination:this.geolocation.value.destination,
+      status:'new'
+    })
   }
   
   markerDragEnd($event: google.maps.MouseEvent) {

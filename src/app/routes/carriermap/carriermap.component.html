@@ -8,10 +8,10 @@
         [markerDraggable]="false"></agm-marker>
     </agm-map>
     <div id="over_map1" style="width: 500px;height: calc(100vh - 100px)"> 
-        <h1>Orders Nearby</h1>
+        <h1 style="padding-left: 30px; padding-top: 20px;">Orders Nearby</h1>
         <form [formGroup]="select">
         <mat-selection-list formControlName="select" (click)="selected(shoes.selectedOptions.selected[0]?.value)" #shoes [multiple]="false">
-            <mat-list-option *ngFor="let shoe of orders" [value]="shoe.key" style="padding-top: 10px; padding-bottom: 10px;">
+            <mat-list-option *ngFor="let shoe of orders" [value]="shoe.key" style="padding-bottom: 10px; padding-top: 10px;">
                 <div fxLayout="row wrap">
                     <div fxFlex="10">
                         <span class="material-icons">
@@ -19,12 +19,11 @@
                             </span>
                         </div>
                         <div fxFlex="70">
-                            {{shoe.key}}
-                            <br>
-                            {{shoe.vehicle}}
+                            {{shoe.origin}} |
+                            {{shoe.distance}} Km
                         </div>
-                        <div fxFlex="20">
-                            <button mat-raised-button type="button" (click)="Accept(shoe.key)" color="primary">Accept Order</button>
+                        <div fxFlex="20" >
+                            <button mat-raised-button type="button" (click)="Accept(shoe.key,shoe.origin,shoe.distance)" color="primary">Accept Order</button>
                         </div>                    
                 </div>
             </mat-list-option>
@@ -50,8 +49,7 @@
             <mat-label>Amount</mat-label>
             <input matInput formControlName="amount" required readonly/>
         </mat-form-field>
-            <button fxFlex="30"mat-raised-button type="button"  color="primary" >Confirm</button>
+            <button fxFlex="30"mat-raised-button type="button"  (click)="Confirm()" color="primary" >Confirm</button>
           </form>
-          {{ select.get('select').value }}
     </div>
   </div>

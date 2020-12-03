@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AngularFireDatabase} from '@angular/fire/database';
+import * as firebase from 'firebase';
 
 export interface PeriodicElement {
   name: string;
@@ -28,7 +30,8 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class UserComponent implements OnInit {
   user: FormGroup;
-  constructor(private fb: FormBuilder) {
+  div: number = 1;
+  constructor(private fb: FormBuilder,private db: AngularFireDatabase) {
     this.user = this.fb.group({
       fname: ['',Validators.required],
       lname: ['',Validators.required]
@@ -36,6 +39,26 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  this.userInfo()
+  }
+  
+  userInfo(){
+    firebase.database().ref('/ShipperInfo/').once('value').then((snapshot) => {
+      var username = (snapshot.val() ) || 'Anonymous';
+      for (const [key, value] of Object.entries(username)) {
+        if (key==localStorage.getItem('session')){
+          this.user.controls['fname'].setValue(value['firstName']);
+          this.user.controls['lname'].setValue(value['lastName']);
+        }
+      }
+    });
+  }
+  update(){
+    let tutorialsRef = this.db.list('ShipperInfo')
+    tutorialsRef.update(localStorage.getItem('session'), { firstName: this.user.value.fname,lastName:this.user.value.lname });
+  }
+  onClick(num){
+    this.div=num
   }
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];

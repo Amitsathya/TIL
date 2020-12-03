@@ -1,36 +1,39 @@
 <mat-drawer-container class="example-container" style="height: auto;">
     <mat-drawer style="width: 300px;" mode="side" opened>
-        <h2>User Account</h2>
+        <h2 style="padding-top:20px;padding-left: 20px;">User Account</h2>
         <mat-divider></mat-divider>
-          <button mat-menu-item>Account Info</button>
+          <button (click)="onClick(1)"mat-menu-item>Account Info</button>
           <mat-divider></mat-divider>
-          <button mat-menu-item>Past Orders</button>
+          <button (click)="onClick(2)" mat-menu-item>Past Orders</button>
           <mat-divider></mat-divider>
-          <button mat-menu-item>Active Orders</button>
+          <button (click)="onClick(3)" mat-menu-item>Active Orders</button>
           <mat-divider></mat-divider>
     </mat-drawer>
     <mat-drawer-content >
         <div fxLayout="row wrap" >
-            <!-- <div  fxFlex="100" style="padding:20px;">
-                <mat-card style="height: 500px;">
+            <div *ngIf="div==1" fxFlex="100" style="padding:20px;">
+                <mat-card style="height: 800px;">
                     <div class="example-container">
-                        <form [formGroup]="user">
-                            <mat-form-field  fxFlex="0 1 calc(50% - 32px)" style="display: block;" appearance="outline" >
+                      <h1>User Info</h1>
+                        <form  fxLayout="row wrap" [formGroup]="user">
+                            <mat-form-field  fxFlex="45" style="display: block;" appearance="outline" >
                                 <mat-label>First Name</mat-label>
                                 <input matInput formControlName="fname" placeholder="Enter your first name" />
                             </mat-form-field>
-                            <mat-form-field fxFlex="0 1 calc(50% - 32px)" style="display: block;" appearance="outline" >
+                            <mat-form-field fxFlex="45" style="display: block;" appearance="outline" >
                                 <mat-label>Last Name</mat-label>
                                 <input matInput formControlName="lname" placeholder="Enter your last name" />
                             </mat-form-field>
+                            <br>
+                            <button fxFlex="10"mat-raised-button type="button" style="margin-top: 10px;"(click)="update()" color="primary" >Update</button>
                         </form>
                       </div>
                 </mat-card>
-            </div> -->
-            <div  fxFlex="100" style="padding:20px;">
-                <mat-card style="height: 500px;">
+            </div>
+            <div *ngIf="div==2" fxFlex="100" style="padding:20px;">
+                <mat-card style="height: 900px;">
                     <div class="example-container">
-                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                        <table mat-table [dataSource]="dataSource" >
                             <!--- Note that these columns can be defined in any order.
                                   The actual rendered columns are set as a property on the row definition" -->
                           
@@ -64,6 +67,10 @@
                     </div>
                 </mat-card>
             </div>
+            <div *ngIf="div==3" fxFlex="100" style="padding:20px;">
+              <mat-card style="height: 900px;">
+                </mat-card>
+                </div>
         </div>       
     </mat-drawer-content>
   </mat-drawer-container>
