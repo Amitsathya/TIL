@@ -45,7 +45,7 @@ export class ShippermapComponent implements OnInit {
         origin_lng: [''],
         dest_lat:[''],
         dest_lng:[''],
-        vehicle: ['',Validators.required],
+        vehicle: [{value:'',disabled: true},Validators.required],
         destination:['',Validators.required]
         // quantity:['',Validators.required],
         // typeof:['',Validators.required],
@@ -155,6 +155,9 @@ export class ShippermapComponent implements OnInit {
             this.geolocation.controls['destination'].setValue(results[0].formatted_address);
             this.dest_lat=latitude;
             this.dest_long=longitude;
+            this.geolocation.controls['vehicle'].enable();
+            let element = document.getElementById('over_map2')
+              element.style.visibility = 'visible'
           }         
         } else {
           window.alert('No results found');
@@ -185,11 +188,12 @@ public markerOptions = {
   lng: Number = 120.979021;
   dir = undefined;
   public getDirection() {
-    this.confirmOrder=true;
-    
-    this.dir = {
-      origin: { lat: this.org_lat, lng:this.dest_long },
-      destination: { lat: this.dest_lat, lng: this.dest_long }
+    if(this.geolocation.valid){
+      this.confirmOrder=true;    
+      this.dir = {
+        origin: { lat: this.org_lat, lng:this.dest_long },
+        destination: { lat: this.dest_lat, lng: this.dest_long }
+      }
     }
   }
 
@@ -208,6 +212,17 @@ public markerOptions = {
       } else {
         element.style.backgroundColor = 'grey'
       }
-      
+  }
+  
+  select(x){
+    this.vehicles.forEach(element => {
+      const ns = document.getElementById(element.id)
+      if(element.value!=x){
+        ns.style.backgroundColor = 'white'
+      } else{
+        ns.style.backgroundColor = 'grey'
+      }
+     });
+    
   }
 }

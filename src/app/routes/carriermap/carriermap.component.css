@@ -5,7 +5,7 @@ agm-map {
   position: relative;
 }
 #over_map1 {
-  background: cyan;
+  background: white;
   position: absolute;
   top: 10px;
   left: 10px;
@@ -13,7 +13,7 @@ agm-map {
 }
 
 #over_map2 {
-  background: cyan;
+  background: white;
   position: absolute;
   top: 20%;
   left: 50%;

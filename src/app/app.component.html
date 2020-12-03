@@ -4,10 +4,15 @@
         <span style="font-size: 30px;" [style.cursor]="'pointer'" routerLink="/">Trans India</span>      
         <span class="example-spacer"></span>
         <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="20px"  >
-        <span routerLink="/shippermap">Shipper</span>
-        <span routerLink="/carriermap">Carrier</span>
+        <a routerLink="/carriermap" >Carrier</a>
+        <a routerLink="/shippermap" >Shipper</a>
         <button *ngIf="this.title=='LOGIN';else logout" mat-raised-button (click)="openDialog()" color="accent">Login</button>
-        <ng-template #logout> <button mat-raised-button (click)="Logout()" color="accent">Logout</button></ng-template>
+        <ng-template #logout> <mat-icon [matMenuTriggerFor]="menu">account_circle
+        </mat-icon></ng-template>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item routerLink="/user">User Account</button>
+            <button mat-menu-item (click)="Logout()">Logout</button>
+          </mat-menu>
     </div>
     </mat-toolbar>
 </div>

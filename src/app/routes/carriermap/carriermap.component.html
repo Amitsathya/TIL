@@ -1,11 +1,16 @@
 <div id="wrapper">
-    <!-- <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+    <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
         <agm-direction *ngIf="dir" [origin]="dir.origin" [destination]="dir.destination"></agm-direction>
-        <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="false"></agm-marker>
-    </agm-map> -->
+        <agm-marker  *ngFor ="let map of orders;"
+        (markerClick)="clickedMarker(map.key)"
+        [latitude]="map.dest_lat" 
+        [longitude]="map.dest_long"
+        [markerDraggable]="false"></agm-marker>
+    </agm-map>
     <div id="over_map1" style="width: 500px;height: calc(100vh - 100px)"> 
         <h1>Orders Nearby</h1>
-        <mat-selection-list (click)="selected(shoes.selectedOptions.selected[0]?.value)" #shoes [multiple]="false">
+        <form [formGroup]="select">
+        <mat-selection-list formControlName="select" (click)="selected(shoes.selectedOptions.selected[0]?.value)" #shoes [multiple]="false">
             <mat-list-option *ngFor="let shoe of orders" [value]="shoe.key" style="padding-top: 10px; padding-bottom: 10px;">
                 <div fxLayout="row wrap">
                     <div fxFlex="10">
@@ -24,6 +29,7 @@
                 </div>
             </mat-list-option>
           </mat-selection-list>
+        </form>
     </div>
     <div id="over_map2" style="width: 500px;">
         <form fxLayout="row wrap" [formGroup]="confirm" style="margin: 20px;">
@@ -46,5 +52,6 @@
         </mat-form-field>
             <button fxFlex="30"mat-raised-button type="button"  color="primary" >Confirm</button>
           </form>
+          {{ select.get('select').value }}
     </div>
   </div>

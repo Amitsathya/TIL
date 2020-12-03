@@ -1,10 +1,10 @@
 <div id="wrapper">
   <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
     <agm-direction *ngIf="dir" [origin]="dir.origin" [destination]="dir.destination"></agm-direction>
-    <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true" [iconUrl] ="{url: '../../../assets/2x/baseline_room_black_18dp.png'}"
+    <agm-marker [latitude]="latitude" [longitude]="longitude" [iconUrl] ="{url: '../../../assets/2x/baseline_room_black_18dp.png'}" [markerDraggable]="true"
       (dragEnd)="markerDragEnd($event)"></agm-marker>
-      <!-- <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
-      (dragEnd)="markerDragEnd1($event)"></agm-marker> -->
+      <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
+      (dragEnd)="markerDragEnd1($event)"></agm-marker>
   </agm-map>
   <div id="over_map1" style="width: 500px;"> 
     <form fxLayout="row wrap" [formGroup]="geolocation" style="margin: 20px;">
@@ -16,22 +16,26 @@
       <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
           <mat-label>Origin</mat-label>
           <input matInput formControlName="origin" required readonly/>
+          <mat-error *ngIf="geolocation.get('origin').invalid">Origin is required</mat-error>
       </mat-form-field>
         <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
-          <mat-label>Search Origin</mat-label>
+          <mat-label>Search Destination</mat-label>
           <input matInput formControlName="search_dest" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search2>
       </mat-form-field> 
       <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
         <mat-label>Destination</mat-label>
         <input matInput formControlName="destination" required readonly/>
+        <mat-error *ngIf="geolocation.get('destination').invalid">Destination is required</mat-error>
     </mat-form-field>
     <mat-form-field fxFlex="100" style="display: block" appearance="outline" >
       <mat-label>Vehicle</mat-label>
-      <mat-select formControlName="vehicle" >
+      <mat-select (selectionChange)="select($event.value)" formControlName="vehicle" >
+        <mat-option>Select Vehicle</mat-option>
         <mat-option *ngFor="let x of vehicles" [value]="x.value">
           {{x.value}}
         </mat-option>
       </mat-select>
+      <mat-error *ngIf="geolocation.get('vehicle').invalid">Vehicle is required</mat-error>
   </mat-form-field>
       <!-- <mat-form-field fxFlex="100" style="display: block;" appearance="outline" >
         <mat-label>Type</mat-label>
@@ -53,32 +57,32 @@
       </mat-option>
     </mat-select>
 </mat-form-field>    -->
-      <button *ngIf="this.confirmOrder==false;else content" fxFlex="30"mat-raised-button type="button"  color="primary" (click)="getDirection()">Select Vehicle</button>
-      <ng-template #content> <button fxFlex="30"mat-raised-button type="submit"  color="primary" (click)="saveForm()">Order</button></ng-template>
+      <button *ngIf="this.confirmOrder==false;else content" fxFlex="30"mat-raised-button type="submit"  color="primary" (click)="getDirection()">Select Vehicle</button>
+      <ng-template #content> <button fxFlex="30"mat-raised-button type="button"  color="primary" (click)="saveForm()">Order</button></ng-template>
     </form>
 </div>
 
 </div>
 
-<div fxLayout="row wrap" id="over_map2" style="min-width:100%;height:200px;">
+<div fxLayout="row wrap" id="over_map2" style="visibility: hidden;;min-width:100%;height:200px;">
   
-  <div id="back1" fxFlex="14" >
+  <div id="back1" fxFlex="11.8" >
     <img src="assets/tata-ace-gold-55853.jpeg" class="image" (click)="this.myfunction('back1','Tata Ace Gold')" height="180px"> 
   </div>
 
-  <div id="back2" fxFlex="14">
+  <div id="back2" fxFlex="11.8">
     <img src="assets/ashok-leyland-dost-strong.jpeg" class="image" (click)="this.myfunction('back2','Ashok Leyland Dost Strong')" height="180px"> 
   </div>
 
-  <div id="back3" fxFlex="14">
+  <div id="back3" fxFlex="11.8">
     <img src="assets/mahindra-bolero-pick-up.jpg" class="image" (click)="this.myfunction('back3','Mahindra Bolero Pickup')" height="180px"> 
   </div>
 
-  <div id="back4" fxFlex="14">
+  <div id="back4" fxFlex="11.8">
     <img src="assets/tata-407.jpg" class="image" (click)="this.myfunction('back4','Tata 407')" height="180px"> 
   </div>
 
-  <div id="back5" fxFlex="14">
+  <div id="back5" fxFlex="11.8">
     <img src="assets/eicher-19ft.jpg" class="image" (click)="this.myfunction('back5','Eicher 19ft')" height="180px"> 
   </div>
 </div>

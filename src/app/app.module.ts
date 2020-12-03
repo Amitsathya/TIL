@@ -29,6 +29,7 @@ import { ShippermapComponent } from './routes/shippermap/shippermap.component';
 import { MatIconModule } from "@angular/material/icon";
 import { HttpClientModule } from "@angular/common/http";
 import { CarriermapComponent } from './routes/carriermap/carriermap.component';
+import { UserComponent } from './routes/user/user.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { CarriermapComponent } from './routes/carriermap/carriermap.component';
     PhoneloginComponent,
     PhonesignupComponent,
     ShippermapComponent,
-    CarriermapComponent
+    CarriermapComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,

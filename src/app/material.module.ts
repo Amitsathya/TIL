@@ -9,10 +9,16 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatIconModule} from '@angular/material/icon';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 @NgModule({
   exports: [
     MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatMenuModule,
     MatToolbarModule,
     MatDialogModule,
     MatFormFieldModule,
