@@ -1,8 +1,7 @@
 <div id="wrapper">
   <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
     <agm-direction *ngIf="dir" [origin]="dir.origin" [destination]="dir.destination"></agm-direction>
-    <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true" [iconUrl] ="
-    {url: '../../../assets/2x/baseline_room_black_18dp.png'}"
+    <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true" [iconUrl] ="{url: '../../../assets/2x/baseline_room_black_18dp.png'}"
       (dragEnd)="markerDragEnd($event)"></agm-marker>
       <!-- <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
       (dragEnd)="markerDragEnd1($event)"></agm-marker> -->
