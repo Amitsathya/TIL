@@ -1,19 +1,17 @@
 .header {
-  background-color: #3f51b5;
-  color: white;
+  background-image: url('../../../assets/trucks4.jpg');
+  color: black;
   min-height: 30%;
   opacity: 80%;
 }
 .header > h1 {
   padding-top: 5%;
-  text-align: center;
-}
-.example-card {
-  max-width: 400px;
-  display: inline-block;
+  padding-left: 5%;
+  padding-bottom: 0%;
+  margin: 0%;
 }
 
-.example-header-image {
-  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-  background-size: cover;
+.header > h2 {
+  padding-left: 5%;
+  padding-top: 2%;
 }
