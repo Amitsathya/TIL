@@ -46,5 +46,11 @@ export class AppComponent implements OnInit {
       this.router.navigate([''])
       localStorage.removeItem("session")
     }
+    shipper(){
+      this.router.navigate(['shippermap']);
+    }
+    carrier(){
+      this.router.navigate(['carriermap']);
+    }
   }
   

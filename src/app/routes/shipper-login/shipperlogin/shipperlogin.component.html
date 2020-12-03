@@ -4,7 +4,7 @@
     <mat-card fxFlex="50" style="margin: auto;padding: 50px;">  
             <div fxLayout="column" fxLayoutAlign="center center">
               <h1 *ngIf="this.type==2;else content">Sign-in Carrier</h1>
-              <ng-template #content> <h1 >Sign-in Shipper</h1></ng-template>
+              <ng-template #content> <h1>Sign-in Shipper</h1></ng-template>
               <mat-divider style="position: relative;"></mat-divider>
               <br/>
               <button mat-raised-button style="background-color: #EB5E4C; color:white" type="button" (click)="GoogleAuth()">
