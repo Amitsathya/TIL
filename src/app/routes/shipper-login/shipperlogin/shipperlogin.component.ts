@@ -48,7 +48,12 @@ export class ShipperloginComponent implements OnInit {
           user.delete();
           this.toastr.error('User is not Registered! Please Register');
         } else {
-          localStorage.setItem("session", 'true');
+            if(this.type=1){
+              localStorage.setItem("type","s");
+            } else{
+              localStorage.setItem("type","c")
+            }
+          localStorage.setItem("session", result.user.uid);
           this.successPage();
         }
     }).catch((error) => {
@@ -78,6 +83,10 @@ export class ShipperloginComponent implements OnInit {
     }
     
     successPage(){
+      if(this.type=1){
       this.router.navigate(['shippermap']);
+      }else{
+        this.router.navigate(['carriermap']);
+      }
     }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core'
 import { MapsAPILoader } from '@agm/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireDatabase} from '@angular/fire/database';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-shippermap',
@@ -34,7 +35,7 @@ export class ShippermapComponent implements OnInit {
   
   
   constructor(
-    private mapsAPILoader: MapsAPILoader,private db: AngularFireDatabase,
+    private mapsAPILoader: MapsAPILoader,private db: AngularFireDatabase,private toastr: ToastrService,
     private ngZone: NgZone,private fb: FormBuilder
     ) { 
       this.geolocation= this.fb.group({
@@ -130,6 +131,7 @@ export class ShippermapComponent implements OnInit {
       destination:this.geolocation.value.destination,
       status:'new'
     })
+    this.toastr.success('Order Successful! Please wait while the Carrier Arrives');
   }
   
   markerDragEnd($event: google.maps.MouseEvent) {

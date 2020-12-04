@@ -43,7 +43,17 @@ export class UserComponent implements OnInit {
   }
   
   userInfo(){
-    firebase.database().ref('/ShipperInfo/').once('value').then((snapshot) => {
+    let x="/ShipperInfo/"
+    if (localStorage.getItem('type')=='c'){
+      x="/CarrierInfo/"
+    }else{
+      x="/ShipperInfo/"
+    }
+    console.log(x);
+    
+    firebase.database().ref(x).once('value').then((snapshot) => {
+      console.log(snapshot.val());
+      
       var username = (snapshot.val() ) || 'Anonymous';
       for (const [key, value] of Object.entries(username)) {
         if (key==localStorage.getItem('session')){

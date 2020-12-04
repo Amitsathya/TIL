@@ -3,6 +3,7 @@ import { MapsAPILoader } from '@agm/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AngularFireDatabase} from '@angular/fire/database';
 import * as firebase from 'firebase';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-carriermap',
@@ -24,7 +25,7 @@ export class CarriermapComponent implements OnInit {
   typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
   zoom: number;
   
-  constructor(private db: AngularFireDatabase,
+  constructor(private db: AngularFireDatabase,private toastr: ToastrService,
     private mapsAPILoader: MapsAPILoader
     ,private fb: FormBuilder) {
     this.confirm= this.fb.group({
@@ -40,6 +41,11 @@ export class CarriermapComponent implements OnInit {
 
   ngOnInit(): void {
     this.mapsAPILoader.load().then(() => {
+      if(localStorage.getItem('login')!='true'){
+        location.reload()
+        localStorage.setItem('logout','false');
+        localStorage.setItem('login','true');
+      }
     this.geoCoder = new google.maps.Geocoder;
     })
     this.Orders()
@@ -131,6 +137,7 @@ public markerOptions = {
     element1.style.visibility = 'hidden'
     this.Orders();
     this.key=null
+    this.toastr.success('Order Accepted! Please drive to the Origin');
   }
   distance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;

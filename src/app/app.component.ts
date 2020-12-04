@@ -45,6 +45,7 @@ export class AppComponent implements OnInit {
       // firebase.auth().signOut()
       this.router.navigate([''])
       localStorage.removeItem("session")
+      localStorage.removeItem("type");
     }
     shipper(){
       this.router.navigate(['shippermap']);

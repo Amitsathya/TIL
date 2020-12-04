@@ -72,7 +72,13 @@ export class PhoneloginComponent implements OnInit {
                           this.toastr.success('Successfully Logged In!')
                           this.dialogRef.close()
                           localStorage.setItem("session", result.user.uid);
-                          this.router.navigate(['shippermap']);
+                          if(this.type==1){
+                            localStorage.setItem("type","s");
+                            this.router.navigate(['shippermap']);
+                          } else{
+                            localStorage.setItem("type","c")
+                            this.router.navigate(['carriermap']);
+                          }
                         }
                         this.user = null;
         })
