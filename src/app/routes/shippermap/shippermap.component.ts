@@ -3,6 +3,8 @@ import { MapsAPILoader } from '@agm/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireDatabase} from '@angular/fire/database';
 import { ToastrService } from 'ngx-toastr';
+import { ActivatedRoute } from '@angular/router';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-shippermap',
@@ -19,6 +21,7 @@ export class ShippermapComponent implements OnInit {
   dest_lat:number;
   dest_long:number;
   zoom:number;
+  edit:any=null;
   private geoCoder;
   type: any = ['Heavy Goods','Fragile']
   units: any = ['Kg','Tons','litres']
@@ -35,7 +38,8 @@ export class ShippermapComponent implements OnInit {
   
   
   constructor(
-    private mapsAPILoader: MapsAPILoader,private db: AngularFireDatabase,private toastr: ToastrService,
+    private mapsAPILoader: MapsAPILoader,private route: ActivatedRoute,
+    private db: AngularFireDatabase,private toastr: ToastrService,
     private ngZone: NgZone,private fb: FormBuilder
     ) { 
       this.geolocation= this.fb.group({
@@ -60,6 +64,37 @@ export class ShippermapComponent implements OnInit {
       localStorage.setItem('logout','false');
       localStorage.setItem('login','true');
     }
+    
+    this.route
+    .queryParams
+    .subscribe(params => {
+      if(params.id){
+        firebase.database().ref('/OrderInfo/').once('value').then((snapshot) => {
+          var username = (snapshot.val() ) || 'Anonymous';
+          for (const [key, value] of Object.entries(username)) {
+           if (params.id==key){
+            this.geolocation.controls['origin'].setValue(value['orign']);
+            this.geolocation.controls['destination'].setValue(value['destination']); 
+            this.geolocation.controls['origin_lng'].setValue(value['org_long']);
+            this.geolocation.controls['origin_lat'].setValue(value['org_lat']); 
+            this.geolocation.controls['dest_lat'].setValue(value['dest_lat']);
+            this.geolocation.controls['dest_lng'].setValue(value['dest_long']);
+            this.org_lat=value['org_lat']
+            this.org_long=value['org_long']
+            this.dest_lat=value['dest_lat']
+            this.dest_long=value['dest_long']
+            this.geolocation.controls['vehicle'].enable();
+            let element = document.getElementById('over_map2')
+              element.style.visibility = 'visible'
+           }
+          }
+      })
+    }
+  if(params.edit){
+    this.edit=params.id
+  }  
+  });
+    
     this.mapsAPILoader.load().then(() => {
       this.setCurrentLocation();
       this.geoCoder = new google.maps.Geocoder;
@@ -83,6 +118,7 @@ export class ShippermapComponent implements OnInit {
           this.zoom = 15;
         });
       });
+      
       autocomplete2.addListener("place_changed", () => {
         this.ngZone.run(() => {
           //get the place result
@@ -118,8 +154,8 @@ export class ShippermapComponent implements OnInit {
     this.geolocation.controls['origin_lng'].setValue(this.org_long);
     this.geolocation.controls['dest_lat'].setValue(this.dest_lat);
     this.geolocation.controls['dest_lng'].setValue(this.dest_long);
-    console.log(this.geolocation.value);
     let tutorialsRef = this.db.list('OrderInfo')
+   if (!this.edit){
     tutorialsRef.push({
       shipper_uid: localStorage.getItem('session'),
       org_lat: this.geolocation.value.origin_lat,
@@ -132,16 +168,29 @@ export class ShippermapComponent implements OnInit {
       status:'new'
     })
     this.toastr.success('Order Successful! Please wait while the Carrier Arrives');
+   } else{
+     tutorialsRef.update(this.edit, { 
+      shipper_uid: localStorage.getItem('session'),
+      org_lat: this.geolocation.value.origin_lat,
+      org_long: this.geolocation.value.origin_lng,
+      dest_lat: this.geolocation.value.dest_lat,
+      dest_long: this.geolocation.value.dest_lng,
+      vehicle: this.geolocation.value.vehicle,
+      orign:this.geolocation.value.origin,
+      destination:this.geolocation.value.destination,
+      status:'new'
+     });
+     this.toastr.success('Order Updated! Please wait while the Carrier Arrives');
+     this.edit=null;
+   }
   }
   
   markerDragEnd($event: google.maps.MouseEvent) {
-    console.log($event);
     this.latitude = $event.latLng.lat();
     this.longitude = $event.latLng.lng();
     this.getAddress(this.latitude, this.longitude,1);
   }
   markerDragEnd1($event: google.maps.MouseEvent) {
-    console.log($event);
     this.latitude = $event.latLng.lat();
     this.longitude = $event.latLng.lng();
     this.getAddress(this.latitude, this.longitude,2);
@@ -149,8 +198,6 @@ export class ShippermapComponent implements OnInit {
   
   getAddress(latitude, longitude,x) {
     this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
-      console.log(results);
-      console.log(status);
       if (status === 'OK') {
         if (results[0]) {
           this.zoom = 15;

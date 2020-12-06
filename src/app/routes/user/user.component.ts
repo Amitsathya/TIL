@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireDatabase} from '@angular/fire/database';
 import * as firebase from 'firebase';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -17,7 +18,8 @@ export class UserComponent implements OnInit {
   dataSource1 = new MatTableDataSource();
   data : any = [];
   data1 : any = [];
-  constructor(private fb: FormBuilder,private db: AngularFireDatabase) {
+  constructor(private fb: FormBuilder,
+    private router: Router,private db: AngularFireDatabase) {
     this.user = this.fb.group({
       fname: ['',Validators.required],
       lname: ['',Validators.required]
@@ -26,24 +28,28 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
   this.userInfo()
+  this.orderInfo()
   if (localStorage.getItem('type')=='c'){
     this.x="CarrierInfo"
    }else{
      this.x="ShipperInfo"
    }
-   firebase.database().ref('/OrderInfo/').once('value').then((snapshot) => {
-    console.log(snapshot.val());
-    var username = (snapshot.val() ) || 'Anonymous';
-    for (const [key, value] of Object.entries(username)) {
-      if (value['shipper_uid']==localStorage.getItem('session') && value['status']=="Completed"){
-        this.data.push({'order_id':key,'origin':value['orign']});
-    } else if(value['shipper_uid']==localStorage.getItem('session') && value['status']=="new"){
-      this.data1.push({'order_id':key,'origin':value['orign']});
-    }}
-    this.dataSource = new MatTableDataSource(this.data);
-    this.dataSource1 = new MatTableDataSource(this.data1);
-  })
+  
 }
+
+  orderInfo(){
+    firebase.database().ref('/OrderInfo/').once('value').then((snapshot) => {
+      var username = (snapshot.val() ) || 'Anonymous';
+      for (const [key, value] of Object.entries(username)) {
+        if (value['shipper_uid']==localStorage.getItem('session') && value['status']=="Completed"){
+          this.data.push({'order_id':key,'origin':value['orign']});
+      } else if(value['shipper_uid']==localStorage.getItem('session') && value['status']=="new"){
+        this.data1.push({'order_id':key,'origin':value['orign']});
+      }}
+      this.dataSource = new MatTableDataSource(this.data);
+      this.dataSource1 = new MatTableDataSource(this.data1);
+    })
+  }
   
   userInfo(){
     let y=null
@@ -71,8 +77,18 @@ export class UserComponent implements OnInit {
   }
   
   reorder(elem){
+    this.router.navigate(['shippermap'], { queryParams: { id: elem.order_id,"edit":false } });
+  }
+  
+  editorder(elem){
+    this.router.navigate(['shippermap'], { queryParams: { id: elem.order_id, "edit":true } });
+  }
+  
+  cancelorder(elem){
+    let tutorialsRef = this.db.list("OrderInfo")
+    tutorialsRef.remove(elem);
     console.log(elem);
-    
+    location.reload();
   }
 
   displayedColumns: string[] = ['date', 'order_id', 'weight', 'origin','destination','action'];
