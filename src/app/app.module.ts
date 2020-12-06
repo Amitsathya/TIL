@@ -30,6 +30,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { HttpClientModule } from "@angular/common/http";
 import { CarriermapComponent } from './routes/carriermap/carriermap.component';
 import { UserComponent } from './routes/user/user.component';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { UserComponent } from './routes/user/user.component';
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBmKYQGubovyobyRFfjEQQbMmRAY8SrgFk',
       libraries: ['places']
-    })
+    }),
+    MatCarouselModule.forRoot(),
   ],
   providers: [AuthenticationGuard],
   bootstrap: [AppComponent]
