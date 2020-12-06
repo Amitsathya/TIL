@@ -33,20 +33,21 @@
             <div *ngIf="div==2" fxFlex="100" style="padding:20px;">
                 <mat-card style="height: 900px;">
                     <div class="example-container">
+                      <h1>Past Orders</h1>
                         <table mat-table [dataSource]="dataSource" >
                             <!--- Note that these columns can be defined in any order.
                                   The actual rendered columns are set as a property on the row definition" -->
                           
                             <!-- Position Column -->
-                            <ng-container matColumnDef="position">
-                              <th mat-header-cell *matHeaderCellDef> No. </th>
+                            <ng-container matColumnDef="date">
+                              <th mat-header-cell *matHeaderCellDef>Date</th>
                               <td mat-cell *matCellDef="let element"> {{element.position}} </td>
                             </ng-container>
                           
                             <!-- Name Column -->
-                            <ng-container matColumnDef="name">
-                              <th mat-header-cell *matHeaderCellDef> Name </th>
-                              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                            <ng-container matColumnDef="order_id">
+                              <th mat-header-cell *matHeaderCellDef>Order ID</th>
+                              <td mat-cell *matCellDef="let element"> {{element.order_id}} </td>
                             </ng-container>
                           
                             <!-- Weight Column -->
@@ -56,9 +57,21 @@
                             </ng-container>
                           
                             <!-- Symbol Column -->
-                            <ng-container matColumnDef="symbol">
-                              <th mat-header-cell *matHeaderCellDef> Symbol </th>
-                              <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+                            <ng-container matColumnDef="origin">
+                              <th mat-header-cell *matHeaderCellDef>Origin</th>
+                              <td mat-cell *matCellDef="let element"> {{element.origin}} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="destination">
+                              <th mat-header-cell *matHeaderCellDef>Destination</th>
+                              <td mat-cell *matCellDef="let element"> {{element.x}} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="action">
+                              <th mat-header-cell *matHeaderCellDef>Action</th>
+                              <td mat-cell *matCellDef="let element">
+                              <button mat-raised-button type="button" (click)="reorder(element)" color="primary" >Reorder</button>
+                            </td>
                             </ng-container>
                           
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -69,6 +82,53 @@
             </div>
             <div *ngIf="div==3" fxFlex="100" style="padding:20px;">
               <mat-card style="height: 900px;">
+                <div class="example-container">
+                  <h1>Active Orders</h1>
+                  <table mat-table [dataSource]="dataSource1" >
+                      <!--- Note that these columns can be defined in any order.
+                            The actual rendered columns are set as a property on the row definition" -->
+                    
+                      <!-- Position Column -->
+                      <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef>Date</th>
+                        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                      </ng-container>
+                    
+                      <!-- Name Column -->
+                      <ng-container matColumnDef="order_id">
+                        <th mat-header-cell *matHeaderCellDef>Order ID</th>
+                        <td mat-cell *matCellDef="let element"> {{element.order_id}} </td>
+                      </ng-container>
+                    
+                      <!-- Weight Column -->
+                      <ng-container matColumnDef="weight">
+                        <th mat-header-cell *matHeaderCellDef> Weight </th>
+                        <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+                      </ng-container>
+                    
+                      <!-- Symbol Column -->
+                      <ng-container matColumnDef="origin">
+                        <th mat-header-cell *matHeaderCellDef>Origin</th>
+                        <td mat-cell *matCellDef="let element"> {{element.origin}} </td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="destination">
+                        <th mat-header-cell *matHeaderCellDef>Destination</th>
+                        <td mat-cell *matCellDef="let element"> {{element.x}} </td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                        <td mat-cell *matCellDef="let element">
+                        <button mat-raised-button type="button" (click)="reorder(element)" color="primary" >Edit Order</button>
+                        <button mat-raised-button type="button" style="margin-left: 5px;"(click)="reorder(element)" color="accent" >Cancel Order</button>
+                      </td>
+                      </ng-container>
+                    
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>                          
+              </div>
                 </mat-card>
                 </div>
         </div>       

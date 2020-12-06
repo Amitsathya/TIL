@@ -2,26 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireDatabase} from '@angular/fire/database';
 import * as firebase from 'firebase';
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-user',
@@ -32,6 +13,10 @@ export class UserComponent implements OnInit {
   user: FormGroup;
   div: number = 1;
   x= null;
+  dataSource = new MatTableDataSource();
+  dataSource1 = new MatTableDataSource();
+  data : any = [];
+  data1 : any = [];
   constructor(private fb: FormBuilder,private db: AngularFireDatabase) {
     this.user = this.fb.group({
       fname: ['',Validators.required],
@@ -46,8 +31,19 @@ export class UserComponent implements OnInit {
    }else{
      this.x="ShipperInfo"
    }
-   console.log(this.x);
-  }
+   firebase.database().ref('/OrderInfo/').once('value').then((snapshot) => {
+    console.log(snapshot.val());
+    var username = (snapshot.val() ) || 'Anonymous';
+    for (const [key, value] of Object.entries(username)) {
+      if (value['shipper_uid']==localStorage.getItem('session') && value['status']=="Completed"){
+        this.data.push({'order_id':key,'origin':value['orign']});
+    } else if(value['shipper_uid']==localStorage.getItem('session') && value['status']=="new"){
+      this.data1.push({'order_id':key,'origin':value['orign']});
+    }}
+    this.dataSource = new MatTableDataSource(this.data);
+    this.dataSource1 = new MatTableDataSource(this.data1);
+  })
+}
   
   userInfo(){
     let y=null
@@ -59,11 +55,7 @@ export class UserComponent implements OnInit {
     firebase.database().ref(y).once('value').then((snapshot) => {
       var username = (snapshot.val() ) || 'Anonymous';
       for (const [key, value] of Object.entries(username)) {
-        console.log("/"+this.x+"/",value,localStorage.getItem('session'));
-        
         if (key==localStorage.getItem('session')){
-          console.log(key);
-          
           this.user.controls['fname'].setValue(value['firstName']);
           this.user.controls['lname'].setValue(value['lastName']);
         }
@@ -77,8 +69,13 @@ export class UserComponent implements OnInit {
   onClick(num){
     this.div=num
   }
+  
+  reorder(elem){
+    console.log(elem);
+    
+  }
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['date', 'order_id', 'weight', 'origin','destination','action'];
+  // dataSource = ELEMENT_DATA;
 
 }
