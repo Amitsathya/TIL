@@ -31,6 +31,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class UserComponent implements OnInit {
   user: FormGroup;
   div: number = 1;
+  x= null;
   constructor(private fb: FormBuilder,private db: AngularFireDatabase) {
     this.user = this.fb.group({
       fname: ['',Validators.required],
@@ -40,23 +41,29 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
   this.userInfo()
+  if (localStorage.getItem('type')=='c'){
+    this.x="CarrierInfo"
+   }else{
+     this.x="ShipperInfo"
+   }
+   console.log(this.x);
   }
   
   userInfo(){
-    let x="/ShipperInfo/"
+    let y=null
     if (localStorage.getItem('type')=='c'){
-      x="/CarrierInfo/"
-    }else{
-      x="/ShipperInfo/"
+      y="/CarrierInfo/"
+    } else{
+      y="/ShipperInfo/"
     }
-    console.log(x);
-    
-    firebase.database().ref(x).once('value').then((snapshot) => {
-      console.log(snapshot.val());
-      
+    firebase.database().ref(y).once('value').then((snapshot) => {
       var username = (snapshot.val() ) || 'Anonymous';
       for (const [key, value] of Object.entries(username)) {
+        console.log("/"+this.x+"/",value,localStorage.getItem('session'));
+        
         if (key==localStorage.getItem('session')){
+          console.log(key);
+          
           this.user.controls['fname'].setValue(value['firstName']);
           this.user.controls['lname'].setValue(value['lastName']);
         }
@@ -64,7 +71,7 @@ export class UserComponent implements OnInit {
     });
   }
   update(){
-    let tutorialsRef = this.db.list('ShipperInfo')
+    let tutorialsRef = this.db.list(this.x)
     tutorialsRef.update(localStorage.getItem('session'), { firstName: this.user.value.fname,lastName:this.user.value.lname });
   }
   onClick(num){

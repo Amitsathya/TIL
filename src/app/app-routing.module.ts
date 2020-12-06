@@ -25,12 +25,12 @@ const routes: Routes = [
   {
     path:'shippermap',
     component: ShippermapComponent,
-    canActivate:[AuthenticationGuard]
+    // canActivate:[AuthenticationGuard]
   },
   {
     path:'carriermap',
     component: CarriermapComponent,
-    canActivate:[AuthcarrierGuard]
+    // canActivate:[AuthcarrierGuard]
   },
   {
     path:'user',
