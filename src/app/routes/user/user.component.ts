@@ -40,11 +40,23 @@ export class UserComponent implements OnInit {
   orderInfo(){
     firebase.database().ref('/OrderInfo/').once('value').then((snapshot) => {
       var username = (snapshot.val() ) || 'Anonymous';
+      let z=null    
+      if (this.x!='CarrierInfo'){
+        z='shipper_uid'
+      }else{
+        z='carrier_uid'
+      }
+      console.log(z);
+      
       for (const [key, value] of Object.entries(username)) {
-        if (value['shipper_uid']==localStorage.getItem('session') && value['status']=="Completed"){
-          this.data.push({'order_id':key,'origin':value['orign']});
-      } else if(value['shipper_uid']==localStorage.getItem('session') && value['status']=="new"){
-        this.data1.push({'order_id':key,'origin':value['orign']});
+        if (value[`${z}`]==localStorage.getItem('session') && value['status']=="Completed"){
+          this.data.push({'order_id':key,'origin':value['orign'],'date':value['date'],destination:value['destination'],weight:value['weight']+value['units']});
+      } else if(value[`${z}`]==localStorage.getItem('session')){
+        if(this.x=='ShipperInfo' && value['status']=="new"){
+          this.data1.push({'order_id':key,'origin':value['orign'],'date':value['date'],destination:value['destination'],weight:value['weight']+value['units']});
+        }else if (this.x=='CarrierInfo' && value['status']=="Accepted"){
+          this.data1.push({'order_id':key,'origin':value['orign'],'date':value['date'],destination:value['destination'],weight:value['weight']+value['units']});
+        }
       }}
       this.dataSource = new MatTableDataSource(this.data);
       this.dataSource1 = new MatTableDataSource(this.data1);
@@ -82,6 +94,12 @@ export class UserComponent implements OnInit {
   
   editorder(elem){
     this.router.navigate(['shippermap'], { queryParams: { id: elem.order_id, "edit":true } });
+  }
+  
+  droporder(elem){
+    let tutorialsRef = this.db.list("OrderInfo")
+    tutorialsRef.update(elem, { shipper_uid: null, status: 'new'});
+    location.reload();
   }
   
   cancelorder(elem){

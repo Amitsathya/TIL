@@ -21,7 +21,8 @@ export class CarriermapComponent implements OnInit {
   confirm: FormGroup;
   select: FormGroup;
   private geoCoder;
-  orders: any = []
+  orders: any = [];
+  marker: any = []
   typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
   zoom: number;
   
@@ -53,7 +54,9 @@ export class CarriermapComponent implements OnInit {
         navigator.geolocation.getCurrentPosition((position) => {
           this.latitude = position.coords.latitude;
           this.longitude = position.coords.longitude;
-          
+            let tutorialsRef = this.db.list('CarrierInfo')
+            tutorialsRef.update(localStorage.getItem('session'), { last_loc: `${this.latitude},${this.longitude}` });
+            this.marker.push({'lat':this.latitude,'lng':this.longitude,'icon':{url: '../../../assets/truck.png', scaledSize: {height: 60, width: 40}}})
           this.zoom = 15;
         });
       }
@@ -67,9 +70,12 @@ export class CarriermapComponent implements OnInit {
       for (const [key, value] of Object.entries(username)) {
         if(value['status']!='Accepted'){
           this.orders.push({'key':key,'dest_lat':value['dest_lat'],'dest_long':value['dest_long'],'org_lat':value['org_lat'],'org_long':value['org_long'],'vehicle':value['vehicle'],'origin':value['orign'],
-        'distance':this.distance(value['org_lat'],value['org_long'],value['dest_lat'],value['dest_long'])})
+        'distance':this.distance(value['org_lat'],value['org_long'],value['dest_lat'],value['dest_long']),'time':Math.round((this.distance(value['org_lat'],value['org_long'],value['dest_lat'],value['dest_long']))/0.763)})
+        this.marker.push({'lat':value['org_lat'],'lng':value['org_long'],'icon':{url: '../../../assets/marker.png', scaledSize: {height: 40, width: 40}}})
         }
       }
+      console.log(this.marker);
+      
     });
   }
 
@@ -85,27 +91,10 @@ export class CarriermapComponent implements OnInit {
    this.getDirection()
   }
   
-  public renderOptions = {
-    suppressMarkers: true,
-}
-
-public markerOptions = {
-    origin: {
-        infoWindow: 'This is origin.',
-        icon: 'your-icon-url',
-        draggable: true,
-    },
-    destination: {
-        icon: 'your-icon-url',
-        label: 'marker label',
-        opacity: 0.8,
-    },
-}
-  
   dir = undefined;
   public getDirection() {
     this.dir = {
-      origin: { lat: this.org_lat, lng:this.dest_long },
+      origin: { lat: this.org_lat, lng:this.org_long },
       destination: { lat: this.dest_lat, lng: this.dest_long }
     }
   }
@@ -130,11 +119,18 @@ public markerOptions = {
   
   Confirm(){
     let tutorialsRef = this.db.list('OrderInfo')
-    tutorialsRef.update(this.key, { status: 'Accepted' });
+    tutorialsRef.update(this.key, { status: 'Accepted',carrier_uid: localStorage.getItem('session') });
+    let tutorialsRefs = this.db.list('CarrierInfo')
+    tutorialsRefs.update(localStorage.getItem('session'), { active: true });
     let element = document.getElementById('over_map1')
     element.style.visibility = 'hidden'
     let element1 = document.getElementById('over_map2')
     element1.style.visibility = 'hidden'
+    this.dest_lat=this.org_lat
+    this.dest_long=this.org_long
+    this.org_lat=this.latitude;
+    this.org_long=this.longitude
+    this.getDirection()
     this.Orders();
     this.key=null
     this.toastr.success('Order Accepted! Please drive to the Origin');

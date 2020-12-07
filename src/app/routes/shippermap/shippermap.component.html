@@ -1,11 +1,16 @@
 <div id="wrapper">
   <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
     <agm-direction *ngIf="dir" [origin]="dir.origin" [destination]="dir.destination"></agm-direction>
-    <agm-marker [latitude]="latitude" [longitude]="longitude"  [markerDraggable]="true"
-      (dragEnd)="markerDragEnd($event)"></agm-marker>
+    <!-- <agm-marker [latitude]="latitude" [longitude]="longitude"  [markerDraggable]="true"
+      (dragEnd)="markerDragEnd($event)"></agm-marker> -->
+      <agm-marker  *ngFor ="let map of marker;"
+      [latitude]="map.lat" 
+      [longitude]="map.lng"
+      [iconUrl] ="map.icon"
+      ></agm-marker>
       <!-- [iconUrl] ="{url: '../../../assets/2x/baseline_room_black_18dp.png'}" -->
-      <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
-      (dragEnd)="markerDragEnd1($event)"></agm-marker>
+      <!-- <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
+      (dragEnd)="markerDragEnd1($event)"></agm-marker> -->
   </agm-map>
   <div id="over_map1" style="width: 500px;"> 
     <form fxLayout="row wrap" [formGroup]="geolocation" style="margin: 20px;">
@@ -45,9 +50,9 @@
             {{x}}
           </mat-option>
         </mat-select>
-    </mat-form-field>  
+    </mat-form-field>  -->
     <mat-form-field fxFlex="75"style="display: block;" appearance="outline" >
-      <mat-label>Quantity</mat-label>
+      <mat-label>Weight</mat-label>
       <input matInput formControlName="quantity" required />
   </mat-form-field> 
   <mat-form-field fxFlex="22" style="display: block;margin-left: 10px;" appearance="outline" >
@@ -57,7 +62,7 @@
         {{x}}
       </mat-option>
     </mat-select>
-</mat-form-field>    -->
+</mat-form-field>    
       <button *ngIf="this.confirmOrder==false;else content" fxFlex="30"mat-raised-button type="submit"  color="primary" (click)="getDirection()">Select Vehicle</button>
       <ng-template #content> <button fxFlex="30"mat-raised-button type="button"  color="primary" (click)="saveForm()">Order</button></ng-template>
     </form>

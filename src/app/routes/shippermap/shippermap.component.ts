@@ -22,6 +22,7 @@ export class ShippermapComponent implements OnInit {
   dest_long:number;
   zoom:number;
   edit:any=null;
+  marker: any = []
   private geoCoder;
   type: any = ['Heavy Goods','Fragile']
   units: any = ['Kg','Tons','litres']
@@ -51,10 +52,10 @@ export class ShippermapComponent implements OnInit {
         dest_lat:[''],
         dest_lng:[''],
         vehicle: [{value:'',disabled: true},Validators.required],
-        destination:['',Validators.required]
-        // quantity:['',Validators.required],
+        destination:['',Validators.required],
+        quantity:['',Validators.required],
         // typeof:['',Validators.required],
-        // unit:['',Validators.required]
+        unit:['',Validators.required]
       }) 
     }
   
@@ -64,7 +65,17 @@ export class ShippermapComponent implements OnInit {
       localStorage.setItem('logout','false');
       localStorage.setItem('login','true');
     }
-    
+    firebase.database().ref('/CarrierInfo/').once('value').then((snapshot) => {
+      
+      var username = (snapshot.val() ) || 'Anonymous';
+      for (const [key, value] of Object.entries(username)) {
+        if(value['last_loc']){
+        let x=value['last_loc'];
+        let y=String(x).split(',');
+        this.marker.push({'lat':y[0],'lng':y[1],'icon':{url: '../../../assets/truck.png', scaledSize: {height: 60, width: 40}}})
+      }
+      }      
+    });
     this.route
     .queryParams
     .subscribe(params => {
@@ -110,10 +121,10 @@ export class ShippermapComponent implements OnInit {
           if (place.geometry === undefined || place.geometry === null) {
             return;
           }
-
           //set latitude, longitude and zoom
           this.latitude = place.geometry.location.lat();
           this.longitude = place.geometry.location.lng();
+          this.marker.push({'lat':this.latitude,'lng':this.longitude,'icon':{url: '../../../assets/marker.png', scaledSize: {height: 40, width: 40}}})        
           this.getAddress(this.latitude, this.longitude,1);
           this.zoom = 15;
         });
@@ -132,6 +143,7 @@ export class ShippermapComponent implements OnInit {
           //set latitude, longitude and zoom
           this.latitude = place.geometry.location.lat();
           this.longitude = place.geometry.location.lng();
+          this.marker.push({'lat':this.latitude,'lng':this.longitude,'icon':{url: '../../../assets/marker.png', scaledSize: {height: 40, width: 40}}})
           this.getAddress(this.latitude, this.longitude,2);
           this.zoom = 15;
         });
@@ -155,9 +167,16 @@ export class ShippermapComponent implements OnInit {
     this.geolocation.controls['dest_lat'].setValue(this.dest_lat);
     this.geolocation.controls['dest_lng'].setValue(this.dest_long);
     let tutorialsRef = this.db.list('OrderInfo')
+    var d = new Date();
+    let x=d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear()
+    console.log(x);
+    
    if (!this.edit){
     tutorialsRef.push({
       shipper_uid: localStorage.getItem('session'),
+      date: x,
+      weight: this.geolocation.value.quantity,
+      units:this.geolocation.value.unit,
       org_lat: this.geolocation.value.origin_lat,
       org_long: this.geolocation.value.origin_lng,
       dest_lat: this.geolocation.value.dest_lat,
@@ -171,6 +190,9 @@ export class ShippermapComponent implements OnInit {
    } else{
      tutorialsRef.update(this.edit, { 
       shipper_uid: localStorage.getItem('session'),
+      date: x,
+      weight: this.geolocation.value.quantity,
+      units:this.geolocation.value.unit,
       org_lat: this.geolocation.value.origin_lat,
       org_long: this.geolocation.value.origin_lng,
       dest_lat: this.geolocation.value.dest_lat,
@@ -245,7 +267,7 @@ public markerOptions = {
     if(this.geolocation.valid){
       this.confirmOrder=true;    
       this.dir = {
-        origin: { lat: this.org_lat, lng:this.dest_long },
+        origin: { lat: this.org_lat, lng:this.org_long },
         destination: { lat: this.dest_lat, lng: this.dest_long }
       }
     }

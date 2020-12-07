@@ -41,7 +41,7 @@
                             <!-- Position Column -->
                             <ng-container matColumnDef="date">
                               <th mat-header-cell *matHeaderCellDef>Date</th>
-                              <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                              <td mat-cell *matCellDef="let element"> {{element.date}} </td>
                             </ng-container>
                           
                             <!-- Name Column -->
@@ -64,13 +64,13 @@
                             
                             <ng-container matColumnDef="destination">
                               <th mat-header-cell *matHeaderCellDef>Destination</th>
-                              <td mat-cell *matCellDef="let element"> {{element.x}} </td>
+                              <td mat-cell *matCellDef="let element"> {{element.destination}} </td>
                             </ng-container>
                             
                             <ng-container matColumnDef="action">
                               <th mat-header-cell *matHeaderCellDef>Action</th>
                               <td mat-cell *matCellDef="let element">
-                              <button mat-raised-button type="button" (click)="reorder(element)" color="primary" >Reorder</button>
+                              <button *ngIf="x=='ShipperInfo'" mat-raised-button type="button" (click)="reorder(element)" color="primary" >Reorder</button>
                             </td>
                             </ng-container>
                           
@@ -91,7 +91,7 @@
                       <!-- Position Column -->
                       <ng-container matColumnDef="date">
                         <th mat-header-cell *matHeaderCellDef>Date</th>
-                        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.date}} </td>
                       </ng-container>
                     
                       <!-- Name Column -->
@@ -114,14 +114,15 @@
                       
                       <ng-container matColumnDef="destination">
                         <th mat-header-cell *matHeaderCellDef>Destination</th>
-                        <td mat-cell *matCellDef="let element"> {{element.x}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.destination}} </td>
                       </ng-container>
                       
                       <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef>Action</th>
                         <td mat-cell *matCellDef="let element">
-                        <button mat-raised-button type="button" (click)="editorder(element)" color="primary" >Edit Order</button>
-                        <button mat-raised-button type="button" style="margin-left: 5px;" (click)="cancelorder(element.order_id)" color="accent" >Cancel Order</button>
+                        <button *ngIf="x=='ShipperInfo'" mat-raised-button type="button" (click)="editorder(element)" color="primary" >Edit Order</button>
+                        <button *ngIf="x=='ShipperInfo';else other_content" mat-raised-button type="button" style="margin-left: 5px;" (click)="cancelorder(element.order_id)" color="accent" >Cancel Order</button>
+                        <ng-template #other_content> <button mat-raised-button type="button" (click)="droporder(element.order_id)" color="accent" >Drop Order</button></ng-template>
                       </td>
                       </ng-container>
                     
