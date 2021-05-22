@@ -86,6 +86,10 @@ export class ShippermapComponent implements OnInit {
            if (params.id==key){
             this.geolocation.controls['origin'].setValue(value['orign']);
             this.geolocation.controls['destination'].setValue(value['destination']); 
+            this.geolocation.controls['quantity'].setValue(value['weight']);
+            this.geolocation.controls['unit'].setValue(value['units']);
+            this.geolocation.controls['vehicle'].setValue(value['vehicle']);
+            this.select(value['vehicle'])
             this.geolocation.controls['origin_lng'].setValue(value['org_long']);
             this.geolocation.controls['origin_lat'].setValue(value['org_lat']); 
             this.geolocation.controls['dest_lat'].setValue(value['dest_lat']);
